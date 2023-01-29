@@ -9,24 +9,31 @@
 
     sessionVariables = {
       EDITOR = "${pkgs.nano}/bin/nano";
-      #EMAIL = "${config.programs.git.userEmail}";
       PAGER = "${pkgs.less}/bin/less";
       CLICOLOR = true;
       GPG_TTY = "$TTY";
-      #PATH = "$PATH:$HOME/.local/bin:$HOME/.tfenv/bin";
     };
 
     ###############################################################################################
     ## programs
 
     programs = {
-      starship.enable = true;
+      starship.enable = false;
 
       # -------------------------------------------------------------------------------------------
 
       fzf = {
         enable = true;
         enableZshIntegration = true;
+        enableBashIntegration = true;
+      };
+
+      # -------------------------------------------------------------------------------------------
+
+      dircolors = {
+        enable = true;
+        enableZshIntegration = true;
+        enableBashIntegration = true;
       };
 
       # -------------------------------------------------------------------------------------------

@@ -2,8 +2,9 @@
 
 {
   imports = [
-    #./git
-    ./shell
-    ./yabai
+    ./git
+    ./shell.nix
+    ./ssh.nix
+    ./yabai.nix
   ];
 }

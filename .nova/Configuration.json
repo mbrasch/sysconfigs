@@ -6,6 +6,8 @@
     "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/flake.nix",
     "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/home\/mbrasch.nix",
     "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/home\/configs\/default.nix",
-    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/darwin\/mbrasch.nix"
+    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/home\/configs\/git.nix",
+    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/home\/configs\/ssh.nix",
+    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/home\/configs\/shell.nix"
   ]
 }

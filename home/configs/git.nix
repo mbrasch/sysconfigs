@@ -2,7 +2,7 @@
 
 {
   programs.git = {
-    enable = true;
+    enable = false;
 
     delta.enable = true;
 
@@ -31,9 +31,7 @@
       ".DS_Store"
       ".AppleDouble"
       ".LSOverride"
-
       "._*"
-
       ".DocumentRevisions-V100"
       ".fseventsd"
       ".Spotlight-V100"
