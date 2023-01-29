@@ -27,7 +27,6 @@
       bootstrap = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
-          #./darwin/bootstrap.nix
         ];
       };
 

@@ -23,7 +23,7 @@ nix-shell -p nix-info --run "nix-info -m"
 **Bootstrapping nix-darwin + home-manager**
 ```shell
 # build the base configuration
-nix build github:mbrasch/sysconfigs#darwinConfigurations.bootstrap-darwin.system
+nix build github:mbrasch/sysconfigs#darwinConfigurations.bootstrap.system
 
 # delete this, otherwise darwin-rebuild will fail to create a symlink to the generated nix config
 sudo rm /etc/nix/nix.conf
