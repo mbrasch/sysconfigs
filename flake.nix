@@ -18,7 +18,7 @@
   #################################################################################################
   ## outputs
 
-  outputs = inputs@{ nixpkgs, nixos, nixos-hardware, darwin, darwin-modules, home-manager, ... }: {
+  outputs = inputs@{ nixpkgs, nixos, nixos-hardware, darwin, home-manager, ... }: {
 
     #--------------------------------------------
     # darwin
