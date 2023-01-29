@@ -6,6 +6,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixos.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -15,7 +18,7 @@
   #################################################################################################
   ## outputs
 
-  outputs = inputs@{ nixpkgs, home-manager, darwin, darwin-modules, ... }: {
+  outputs = inputs@{ nixpkgs, nixos, nixos-hardware, darwin, darwin-modules, home-manager, ... }: {
 
     #--------------------------------------------
     # darwin
@@ -29,11 +32,19 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.mbrasch = import ./home;
+            home-manager.users.mbrasch = import ./home/mbrasch.nix;
           }
         ];
       };
     };
+
+    #--------------------------------------------
+    # nixos
+
+    nixosConfigurations = {
+
+    };
+
   };
 
 }
