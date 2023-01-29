@@ -1,0 +1,8 @@
+{
+  "eablokker.tabsSidebar.config.customKindGroupsOrder" : [
+    "nix"
+  ],
+  "eablokker.tabsSidebar.config.customTabOrder" : [
+    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/flake.nix"
+  ]
+}
