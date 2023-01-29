@@ -24,6 +24,14 @@
     # darwin
 
     darwinConfigurations = {
+      bootstrap = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          #./darwin/bootstrap.nix
+        ];
+      };
+
+
       mbrasch = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
