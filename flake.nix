@@ -18,8 +18,14 @@
   #################################################################################################
   ## outputs
 
-  outputs = inputs@{ nixpkgs, nixos, nixos-hardware, darwin, home-manager, ... }: {
-
+  outputs = inputs @ {
+    nixpkgs,
+    nixos,
+    nixos-hardware,
+    darwin,
+    home-manager,
+    ...
+  }: {
     #--------------------------------------------
     # darwin
 
@@ -30,11 +36,10 @@
         ];
       };
 
-
       mbrasch = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
-          ./darwin/configuration.nix
+          ./darwin/mbrasch
           home-manager.darwinModules.default
           {
             home-manager.useGlobalPkgs = true;
@@ -49,9 +54,18 @@
     # nixos
 
     nixosConfigurations = {
-
+      nixos-vm = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          ./nixos/nixos-vm
+          home-manager.darwinModules.default
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.mbrasch = import ./home/mbrasch.nix;
+          }
+        ];
+      };
     };
-
   };
-
 }
