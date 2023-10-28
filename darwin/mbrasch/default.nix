@@ -3,7 +3,7 @@
 {
   # includes sub-configurations
   imports = [
-
+    ./nix-nixpkgs-conf.nix
   ];
 
   # includes overlays to default packages
@@ -14,11 +14,4 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  nix.package = pkgs.nix;
-  nix.extraOptions = ''
-      experimental-features = nix-command flakes
-  '';
-
-  environment.shells = [ pkgs.zsh ];
-
 }

@@ -9,6 +9,7 @@
 
     sessionVariables = {
       EDITOR = "${pkgs.nano}/bin/nano";
+      #EMAIL = "${config.programs.git.userEmail}";
       PAGER = "${pkgs.less}/bin/less";
       CLICOLOR = true;
       GPG_TTY = "$TTY";
@@ -18,7 +19,9 @@
     ## programs
 
     programs = {
-      starship.enable = false;
+      home-manager = {
+        enable = true;
+      };
 
       # -------------------------------------------------------------------------------------------
 
@@ -39,8 +42,8 @@
       # -------------------------------------------------------------------------------------------
 
       direnv = {
-        enable = true;
-        nix-direnv.enable = true;
+        enable = false;
+        nix-direnv.enable = false;
       };
 
       # -------------------------------------------------------------------------------------------
@@ -62,6 +65,17 @@
           share = true; # Share command history between zsh sessions.
           save = 10000; # Number of history lines to save.
           size = 10000; # Number of history lines to keep.
+        };
+        
+        syntaxHighlighting = {
+          enable = true;
+          styles = { };
+        };
+        
+        historySubstringSearch = {
+          enable = true;
+          #searchDownKey = [ ];
+          #searchUpKey = [ ];
         };
 
         # Extra commands that should be added to .zshenv.
@@ -98,9 +112,10 @@
         };
 
         # Similar to opt-programs.zsh.shellAliases, but are substituted anywhere on a line.
-        #shellGlobalAliases = {
-        #  G = "| grep";
-        #};
+        shellGlobalAliases = {
+          UUID = "$(uuidgen | tr -d \\n)";
+          G = "| grep";
+        };
 
         plugins = [ ]; # Plugins to source in .zshrc
 
@@ -135,6 +150,46 @@
             "timer"
           ];
         };
+        
+        # prezto = {
+        #   enable = true;
+        #   autosuggestions.color = null;
+        #   caseSensitive = true;
+        #   color = true;
+        #   editor.dotExpansion = true;
+        #   editor.promptContext = true;
+        #   extraConfig = "";
+        #   extraFunctions = [ ];
+        #   extraModules = [  ];
+        #   historySubstring = {
+        #     foundColor = null;
+        #     globbingFlags = null;
+        #     notFoundColor = null;
+        #   };
+        #   macOS.dashKeyword = "dash";
+        #   pmodules = [
+        #     "environment"
+        #     "terminal"
+        #     "editor"
+        #     "history"
+        #     "spectrum"
+        #     "completion" # offers tab-completion from the zsh-completions project
+        #     "directory" # sets directory options
+        #     "utility" # defines aliases and functions (highlight matches when pressing <tab>)
+        #     "git" # displays git repository information in the terminal
+        #     "prompt" # defines a theme for your terminal
+        #     "syntax-highlighting" # offers fish-like-highlighting statuslinecolorful executables, underlined folders, …
+        #     "history-substring-search" # type in a word and press up and down to cycle through matching commands
+        #     "autosuggestions"
+        #   ];
+        #   prompt = {
+        #     pwdLength = "short"; # null | "short" | "long" | "full"
+        #     showReturnVal = true;
+        #     theme = "powerlevel10k";
+        #   };
+        #   #ssh.identities = [ ];
+        #   tmux.itermIntegration = true;
+        # };
       };
     };
 

@@ -8,8 +8,13 @@
 
     userEmail = "mike@mbrasch.de";
     userName = "Mike Brasch";
+    # signing = {
+    #   key = "${key}";
+    #   signByDefault = true;
+    # };
 
     extraConfig = {
+      github.user = "mbrasch";
       commit.gpgsign = false;
       push.default = "current";
       fetch.prune = true;

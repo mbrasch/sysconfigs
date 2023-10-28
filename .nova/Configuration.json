@@ -1,11 +1,9 @@
 {
   "eablokker.tabsSidebar.config.customKindGroupsOrder" : [
-    "nix",
-    "markdown"
+    "nix"
   ],
   "eablokker.tabsSidebar.config.customTabOrder" : [
-    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/flake.nix",
-    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/README.md",
-    "\/Users\/mbrasch\/Repositories\/MyProjects\/sysconfigs\/darwin\/mbrasch.nix"
+    "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/flake.nix",
+    "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/devenv.nix"
   ]
 }
