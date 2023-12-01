@@ -188,7 +188,13 @@
                 
       ##############################################################################################################
       ## home-manager
-        
+      ## stand-alone installation:
+      ##   nix build .#homeConfigurations.mbrasch.systems.aarch64-darwin.activationPackage
+      ##   ./result/activate
+      ##
+      ## stand-alone usage:
+      ##   home-manager switch --flake .#mbrasch
+
       homeConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
         username = "mbrasch";
@@ -197,7 +203,7 @@
           inherit pkgs;
           extraSpecialArgs = { inherit inputs username; }; 
           modules = [
-            ./nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
+            #./nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
             ./home/${username}
           ];
         };
