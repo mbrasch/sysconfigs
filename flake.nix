@@ -233,7 +233,7 @@
         default = devenv.lib.mkShell {
           inherit inputs pkgs;
           modules = [
-            (import ./devenv.nix {inherit inputs pkgs system;})
+            ( import ./devenv.nix {inherit inputs pkgs system;} )
           ];
         };
       });
