@@ -205,7 +205,7 @@
           inherit pkgs;
           extraSpecialArgs = { inherit inputs username; }; 
           modules = [
-            ./home/nix-nixpkgs-conf.nix
+            ./home/common/nix-nixpkgs-conf.nix
             ./home/${username}
           ];
         };
