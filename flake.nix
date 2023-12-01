@@ -197,14 +197,28 @@
 
       homeConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
-        username = "mbrasch";
       in {
-        mbrasch = home-manager.lib.homeManagerConfiguration {
+        # ---------------------------------------------------------------
+        mbrasch = let
+          username = "mbrasch";
+        in home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit inputs username; }; 
           modules = [
-            #./nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
+            ./home/nix-nixpkgs-conf.nix
             ./home/${username}
+          ];
+        };
+
+        # ---------------------------------------------------------------
+        admin = let
+          username = "admin";
+        in home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs username; }; 
+          modules = [
+            ./home/nix-nixpkgs-conf.nix
+            #./home/${username}
           ];
         };
       });

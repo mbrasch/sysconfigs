@@ -10,8 +10,8 @@ let
 in {
   imports = [
     # You can split up your configuration and import pieces of it here:
-    ./zsh.nix
-    ./shell-tools.nix
+    ../common/zsh.nix
+    ../common/shell-tools.nix
     
     # If you want to use modules your own flake exports (from modules/home-manager):
     #outputs.homeManagerModules.example
