@@ -22,12 +22,12 @@
     #  "ssh://root@nixos.local aarch64-linux,x86_64-linux"
     #];
     #builders-use-substitutes = true;
-    #extra-trusted-substituters = [
-    #  "https://nix-community.cachix.org"
-    #];
-    #extra-trusted-public-keys = [
-    #  "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    #];
+    extra-trusted-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+    ];
   };
 
   #################################################################################################
@@ -226,7 +226,8 @@
 
       ##############################################################################################################
       ## devShells
-      ## nix develop [default]
+      ## nix develop [.#default]
+
       devShells = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
