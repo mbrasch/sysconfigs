@@ -17,6 +17,7 @@
   ##      nix.settings.trusted-users = [ "mike" ];
   
   nixConfig = {
+    bash-prompt = "\[sysconfigs\]$ ";
     # experimental-features = [  ];    
     #buildMachines = [
     #  "ssh://root@nixos.local aarch64-linux,x86_64-linux"
@@ -33,9 +34,10 @@
   #################################################################################################
   ## inputs
   ##
-  ## introspect -> nix flake metadata
+  ## introspect   -> nix flake metadata
+  ## update       -> nix flake update
   ##
-  ## use "git+file:///to/project/path" for local references
+  ## use "git+file:///to/project/path" for local references (only during development of this flake)
   
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -114,11 +116,10 @@
   #################################################################################################
   ## outputs
   ##
-  ## introspect           -> nix flake show
-  ## enter devenv-shell   -> nix develop [--impure]
+  ## introspect   -> nix flake show
 
-  outputs = { self, nixpkgs, nixcasks, nixos, nixos-hardware, darwin, home-manager, devenv, ... } @inputs: 
-    let
+  outputs = { self, nixpkgs, nixos, nixos-hardware, darwin, home-manager, devenv, ... } @inputs: 
+    let      
       # System types to support.
       supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
@@ -128,7 +129,20 @@
       # Nixpkgs instantiated for supported system types.
       nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     in rec {
-          
+      
+      ##############################################################################################################
+      ## packages
+      ##
+      ##   nix build .#<name>
+      ##   nix run .#<name> [-- <args>]
+      
+      packages = forAllSystems ( system: let
+        pkgs = nixpkgsFor.${system};
+      in {
+        hello = pkgs.hello; 
+      });
+      
+      
       ##############################################################################################################
       ## nixcasks
       ## in config use like:
@@ -145,6 +159,12 @@
 
       ##############################################################################################################
       ## nixos
+      ##
+      ## install:
+      ##   @TODO
+      ##
+      ## usage:
+      ##   nixos-rebuild switch --flake .#bistroserve
 
       nixosConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
@@ -167,6 +187,12 @@
 
       ##############################################################################################################
       ## nix-darwin
+      ##
+      ## installation:
+      ##   @TODO
+      ##
+      ## usage:
+      ##   darwin-rebuild switch --flake .#mbrasch
     
       darwinConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
@@ -188,6 +214,7 @@
                 
       ##############################################################################################################
       ## home-manager
+      ##
       ## stand-alone installation:
       ##   nix build .#homeConfigurations.mbrasch.systems.aarch64-darwin.activationPackage
       ##   ./result/activate
@@ -217,7 +244,7 @@
           inherit pkgs;
           extraSpecialArgs = { inherit inputs username; }; 
           modules = [
-            ./home/nix-nixpkgs-conf.nix
+            ./home/common/nix-nixpkgs-conf.nix
             #./home/${username}
           ];
         };
@@ -226,18 +253,33 @@
 
       ##############################################################################################################
       ## devShells
-      ## nix develop [.#default]
+      ##
+      ## nix develop [.#default] [--impure]
 
       devShells = forAllSystems ( system: let 
+        inherit self;
         pkgs = nixpkgsFor.${system};
       in {
         default = devenv.lib.mkShell {
           inherit inputs pkgs;
           modules = [
-            ( import ./devenv.nix {inherit inputs pkgs system;} )
+            ( import ./devenv.nix { inherit inputs pkgs self system; } )
           ];
         };
       });
+      
+      
+      ##############################################################################################################
+      ## checks
+      ##
+      ## nix check [.#default]
 
+      checks =  forAllSystems ( system: let 
+        pkgs = nixpkgsFor.${system};
+      in {
+        default = {};
+      });
+      
+      
     };
 }

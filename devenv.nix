@@ -1,8 +1,13 @@
-{ inputs, pkgs, system, ... }: {
-  devcontainer.enable = false; # GitHub Codespaces https://github.com/features/codespaces
+{ inputs, pkgs, system, self, ... }@args: {
+  name = "nixos-anywhere";
+  devenv.debug = false;
   devenv.flakesIntegration = true;
+
+  devcontainer.enable = false; # GitHub Codespaces https://github.com/features/codespaces
   difftastic.enable = true;
   languages.nix.enable = true;
+
+  infoSections = { };
 
   hosts = {
     #"example.com" = "127.0.0.1";
@@ -11,10 +16,11 @@
   packages = [
     inputs.sops-nix.packages.${system}.default
     inputs.nixos-anywhere.packages.${system}.nixos-anywhere
-    pkgs.jq # use package from pkgs (defined via inputs.nixpkgs)
+    pkgs.jq
     pkgs.sops
     pkgs.age
     pkgs.ssh-to-age
+    self.packages.${system}.hello
   ];
 
   env = {
@@ -22,23 +28,13 @@
   };
 
   enterShell = ''
-    greet
+    hello
+    echo "Run 'info' to get a short overview about this project"
   '';
 
   scripts = {
-    greet.exec = ''
-      echo "Run 'info' to get a short overview about this project"
+    info.exec = ''
+      echo "s could be an infotext"
     '';
-
-    info.exec = '''';
   };
-
-  pre-commit = {
-    hooks = { };
-    settings = { };
-  };
-
-  processes = { };
-
-  services = { };
 }

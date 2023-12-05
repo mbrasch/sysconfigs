@@ -3,8 +3,8 @@
 {
   imports = [
     ./git
-    ./shell.nix
+    ./shell-tools.nix
     ./ssh.nix
-    ./yabai.nix
+    ./zsh.nix
   ];
 }
