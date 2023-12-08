@@ -125,13 +125,17 @@
   outputs = { self, nixpkgs, nixos, nixos-hardware, darwin, home-manager, devenv, ... } @inputs: 
     let      
       # System types to support.
-      supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+      supportedNixSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+      supportedNixosSystems = [ "x86_64-linux" "aarch64-linux" ];
+      supportedDarwinSystems = [ "x86_64-darwin" "aarch64-darwin" ];
 
       # Helper function to generate an attrset '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      forAllNixSystems = nixpkgs.lib.genAttrs supportedNixSystems;
+      forAllNixosSystems = nixpkgs.lib.genAttrs supportedNixosSystems;
+      forAllDarwinSystems = nixpkgs.lib.genAttrs supportedDarwinSystems;
 
       # Nixpkgs instantiated for supported system types.
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
+      nixpkgsFor = forAllNixSystems (system: import nixpkgs { inherit system; });
     in rec {
       
       ##############################################################################################################
@@ -140,7 +144,7 @@
       ##   nix build .#<name>
       ##   nix run .#<name> [-- <args>]
       
-      packages = forAllSystems ( system: let
+      packages = forAllNixSystems ( system: let
         pkgs = nixpkgsFor.${system};
       in {
         hello = pkgs.hello; 
@@ -171,23 +175,20 @@
       ##   nixos-rebuild switch --flake .#bistroserve
       
 
-      nixosConfigurations = forAllSystems ( system: let 
+      nixosConfigurations = forAllNixosSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
         
-        nixosConfigurations = {
-          installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
-            system = "aarch64-linux";
-            modules = [ ./custom-iso.nix ];
-            format = "install-iso";
-          };
-          
-          # nix build .#nixosConfigurations.installer-iso-rrz-x86_64
-          installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
-            system = "x86_64-linux";
-            modules = [ ./custom-iso.nix ];
-            format = "install-iso";
-          };
+        installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
+          inherit system;
+          modules = [ ./nixos/custom-iso.nix ];
+          format = "install-iso";
+        };
+
+        installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
+          inherit system;
+          modules = [ ./nixos/custom-iso.nix ];
+          format = "install-iso";
         };
 
         bistroserve = nixpkgs.lib.nixosSystem {
@@ -215,7 +216,7 @@
       ## usage:
       ##   darwin-rebuild switch --flake .#mbrasch
     
-      darwinConfigurations = forAllSystems ( system: let 
+      darwinConfigurations = forAllDarwinSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
         mbrasch = darwin.lib.darwinSystem {
@@ -246,7 +247,7 @@
       ## usage:
       ##   home-manager switch --flake .#<name>
 
-      homeConfigurations = forAllSystems ( system: let 
+      homeConfigurations = forAllNixSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
         # ---------------------------------------------------------------
@@ -280,7 +281,7 @@
       ##
       ## nix develop [.#default] [--impure]
 
-      devShells = forAllSystems ( system: let 
+      devShells = forAllNixSystems ( system: let 
         inherit self;
         pkgs = nixpkgsFor.${system};
       in {
@@ -298,7 +299,7 @@
       ##
       ## nix check [.#default]
 
-      # checks =  forAllSystems ( system: let 
+      # checks =  forAllNixSystems ( system: let 
       #   pkgs = nixpkgsFor.${system};
       # in {
       #   default = {};

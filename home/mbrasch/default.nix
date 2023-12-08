@@ -55,6 +55,10 @@ in {
       "$HOME/Library/Python/3.9/bin"
     ];
     
+    home. sessionVariables = {
+      #NIX_PATH = "$HOME/.hm-nixchannels";
+    };
+    
     file = { 
       #"${config.xdg.configHome}/neofetch/config.conf".text = builtins.readFile ./neofetch.conf;
     };
