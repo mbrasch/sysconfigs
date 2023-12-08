@@ -67,6 +67,10 @@
     nix-search.url = "github:peterldowns/nix-search-cli";
     nix-search.inputs.nixpkgs.follows = "nixpkgs";
     
+    # no-nixpkgs standard library for the nix expression language
+    # documentation: source code -> https://github.com/chessai/nix-std/
+    nix-std.url = "github:chessai/nix-std";
+    
     #piratebay.url = "github:tsirysndr/piratebay";
     #piratebay.inputs.nixpkgs.follows = "nixpkgs";
     
@@ -91,7 +95,7 @@
     #flake-root.inputs.nixpkgs-lib.follows = "nixpkgs";
     
     # https://github.com/nix-community/nixos-generators claim: one config, multiple formats
-    #nixos-generators.url = "github:nix-community/nixos-generators";
+    nixos-generators.url = "github:nix-community/nixos-generators";
     #nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     
     # https://github.com/numtide/nixos-anywhere claim: install nixos everywhere via ssh
@@ -165,10 +169,27 @@
       ##
       ## usage:
       ##   nixos-rebuild switch --flake .#bistroserve
+      
 
       nixosConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
+        
+        nixosConfigurations = {
+          installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
+            system = "aarch64-linux";
+            modules = [ ./custom-iso.nix ];
+            format = "install-iso";
+          };
+          
+          # nix build .#nixosConfigurations.installer-iso-rrz-x86_64
+          installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
+            system = "x86_64-linux";
+            modules = [ ./custom-iso.nix ];
+            format = "install-iso";
+          };
+        };
+
         bistroserve = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit pkgs inputs; };
           modules = [
@@ -215,12 +236,15 @@
       ##############################################################################################################
       ## home-manager
       ##
-      ## stand-alone installation:
-      ##   nix build .#homeConfigurations.mbrasch.systems.aarch64-darwin.activationPackage
+      ## stand-alone (darwin or normal linux distribution)
+      ##   IMPORTANT: only use each home configuration when logged in to the respective user account
+      ##
+      ## initial installation:
+      ##   nix build .#homeConfigurations.<name>.activationPackage
       ##   ./result/activate
       ##
-      ## stand-alone usage:
-      ##   home-manager switch --flake .#mbrasch
+      ## usage:
+      ##   home-manager switch --flake .#<name>
 
       homeConfigurations = forAllSystems ( system: let 
         pkgs = nixpkgsFor.${system};
@@ -274,11 +298,11 @@
       ##
       ## nix check [.#default]
 
-      checks =  forAllSystems ( system: let 
-        pkgs = nixpkgsFor.${system};
-      in {
-        default = {};
-      });
+      # checks =  forAllSystems ( system: let 
+      #   pkgs = nixpkgsFor.${system};
+      # in {
+      #   default = {};
+      # });
       
       
     };
