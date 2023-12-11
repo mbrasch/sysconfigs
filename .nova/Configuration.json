@@ -6,7 +6,6 @@
   "eablokker.tabsSidebar.config.customTabOrder" : [
     "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/home\/mbrasch\/default.nix",
     "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/devenv.nix",
-    "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/flake.nix",
-    "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/README.md"
+    "\/Volumes\/Shared\/Repositories\/Privat\/sysconfigs\/flake.nix"
   ]
 }

@@ -28,7 +28,6 @@
   };
 
   enterShell = ''
-    hello
     echo "Run 'info' to get a short overview about this project"
   '';
 
@@ -40,7 +39,7 @@
       echo -e "to show which outputs can be built, run:"
       echo -e "   nix flake show"
       echo -e ""
-      echo -e "to bootstrap home-manager, run:"
+      echo -e "to bootstrap stand-alone home-manager, run:"
       echo -e "   nix build .#homeConfigurations.<name>.activationPackage"
       echo -e "   ./result/activate"
       echo -e ""

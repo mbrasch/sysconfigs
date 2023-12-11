@@ -124,6 +124,7 @@ in {
       helix # post-modern modal text editor
       shell_gpt # ChatGPT in your terminal
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
+      android-tools
       
       #------------------------------------------
       # languages
@@ -177,7 +178,8 @@ in {
   programs = {
     home-manager = {
       enable = true;
-      path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
+      #path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
+      path = "/Volumes/Shared/Repositories/Privat/sysconfigs";
     };
     
     git = {

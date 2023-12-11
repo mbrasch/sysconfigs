@@ -46,6 +46,7 @@
     initExtraFirst = ''
       #${pkgs.fastfetch}/bin/fastfetch
       source ${config.xdg.configHome}/zsh/p10k.zsh
+      source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
     '';
     
     #initExtra = builtins.readFile ./p10k.zsh;
