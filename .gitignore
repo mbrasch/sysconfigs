@@ -1,5 +1,12 @@
-.devenv
-.direnv
-.nova
-.vscode
-result
+# macOS/Windows/Linux foo
+**/.DS_Store
+
+# nix, devenv, direnv
+**/.devenv/
+**/.direnv/
+**/.envrc
+result/
+
+# editors
+.nova/
+.vscode/
