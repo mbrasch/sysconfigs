@@ -1,11 +1,11 @@
 {
   description = "Various Nix configurations for Darwin and NixOS";
 
-  #####################################################################################################################
+  ##################################################################################################
   ## nixConfig
   ##
-  ## here you can configure nix specific to this project. you may (and probably will) asked for your permissions for
-  ## security relevant settings.
+  ## here you can configure nix specific to this project. you may (and probably will) asked for
+  ## your permissions for security relevant settings.
   ##
   ## For the extra-substituters, you need add your username to the trusted list
   ##   in /etc/nix/nix.conf. Edit this file direct
@@ -31,7 +31,7 @@
     ];
   };
 
-  #####################################################################################################################
+  ##################################################################################################
   ## inputs
   ##
   ## introspect   -> nix flake metadata
@@ -148,7 +148,7 @@
 
   };
 
-  #####################################################################################################################
+  ##################################################################################################
   ## outputs
   ##
   ## introspect   -> nix flake show
@@ -166,10 +166,14 @@
       forAllDarwinSystems = nixpkgs.lib.genAttrs supportedDarwinSystems;
 
       # Nixpkgs instantiated for supported system types.
-      nixpkgsFor = forAllNixSystems (system: import nixpkgs { inherit system; });
+      nixpkgsFor = forAllNixSystems (system: import nixpkgs { 
+        inherit system;
+        config.allowUnfree = true;
+        #overlays = [ inputs.self.overlays.default ];
+      });
     in rec {
       
-      #################################################################################################################
+      ##############################################################################################
       ## packages
       ##
       ##   nix build .#<name>
@@ -182,7 +186,7 @@
       });
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## nixcasks
       ## in config use like:
       ##    with pkgs.nixcasks; [ mpv paintbrush tor-browser ]
@@ -196,7 +200,7 @@
       #});
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## nixosConfigurations
       ##
       ## install:
@@ -238,7 +242,7 @@
       });
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## darwinConfigurations
       ##
       ## installation:
@@ -265,7 +269,7 @@
       });
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## homeConfigurations
       ##
       ## stand-alone (darwin or normal linux distribution)
@@ -278,36 +282,29 @@
       ## usage:
       ##   home-manager switch --flake .#<name>
 
-      homeConfigurations = forAllNixSystems ( system: let 
-        pkgs = nixpkgsFor.${system};
-      in {
-        # ---------------------------------------------------------------
-        mbrasch = let
-          username = "mbrasch";
-        in home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+      homeConfigurations = let
+        mkHomeConfig = system: username: home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgsFor.${system};
           extraSpecialArgs = { inherit inputs username; }; 
           modules = [
             ./home/common/nix-nixpkgs-conf.nix
             ./home/${username}
           ];
         };
-
-        # ---------------------------------------------------------------
-        admin = let
-          username = "admin";
-        in home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit inputs username; }; 
-          modules = [
-            ./home/common/nix-nixpkgs-conf.nix
-            #./home/${username}
-          ];
-        };
-      });
+      in {
+        mbrasch-aarch64-darwin = mkHomeConfig "aarch64-darwin" "mbrasch";
+        mbrasch-x64_64-darwin = mkHomeConfig "x86_64-darwin" "mbrasch";
+        mbrasch-aarch64-linux = mkHomeConfig "aarch64-linux" "mbrasch";
+        mbrasch-x64_64-linux = mkHomeConfig "x86_64-linux" "mbrasch";
+        
+        admin-aarch64-darwin = mkHomeConfig "aarch64-darwin" "admin";
+        admin-x64_64-darwin = mkHomeConfig "x86_64-darwin" "admin";
+        admin-aarch64-linux = mkHomeConfig "aarch64-linux" "admin";
+        admin-x64_64-linux = mkHomeConfig "x86_64-linux" "admin";
+      };
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## devShells
       ##
       ## nix develop [.#default] [--impure]
@@ -325,7 +322,7 @@
       });
 
 
-      #################################################################################################################
+      ##############################################################################################
       ## checks
       ##
       ## nix check [.#default]

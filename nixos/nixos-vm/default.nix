@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{ config, pkgs, lib, ... }: {
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
@@ -82,7 +77,7 @@
     allowBroken = false;
   };
 
-  # -----------------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------------------
 
   networking = {
     hostName = "nixos"; # Define your hostname.
@@ -135,11 +130,9 @@
     };
   };
 
-  services = {
-    openssh = {
-      enable = true;
-      settings = {PermitRootLogin = "prohibit-password";};
-    };
+  services.openssh = {
+    enable = true;
+    settings = {PermitRootLogin = "prohibit-password";};
   };
 
   services.openvpn.servers = {
@@ -152,7 +145,7 @@
     };
   };
 
-  # -----------------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------------------
 
   time.timeZone = "Europe/Berlin";
 
@@ -190,7 +183,7 @@
     };
   };
 
-  # -----------------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------------------
 
   services.spice-webdavd.enable = true;
   services.spice-vdagentd.enable = true;
@@ -206,8 +199,35 @@
     pulse.enable = true;
     jack.enable = false;
   };
+  
+  # --------------------------------------------------------------------------------------------------------------------
+  
+  services.paperless = {
+    enable = true;
+    user = "paperless";
+    adress = "localhost";
+    port = "28981";
+    passwordFile = "/run/keys/paperless-password";
 
-  # -----------------------------------------------------------------------------------------------------------------------
+    dataDir = "/var/lib/paperless";
+    mediaDir = "${config.services.paperless.dataDir}/media";
+    consumptionDir = "${config.services.paperless.dataDir}/consume";
+    consumptionDirIsPublic = false;
+    
+    # configuration options: https://docs.paperless-ngx.com/configuration/
+    extraConfig = {
+      PAPERLESS_OCR_LANGUAGE = "deu+eng";
+      PAPERLESS_DBHOST = "/run/postgresql";
+      PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [ ".DS_STORE/*" "desktop.ini" ];
+      
+      PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
+        optimize = 1;
+        pdfa_image_compression = "lossless";
+      };
+    };
+  };
+
+  # --------------------------------------------------------------------------------------------------------------------
 
   environment = {
     systemPackages = with pkgs; [firefox git curl bat fzf btop dig nmap];
@@ -216,7 +236,7 @@
     };
   };
 
-  # -----------------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------------------
 
   users.users = {
     root = {
@@ -250,7 +270,7 @@
     };
   };
 
-  # -----------------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------------------
 
   programs = {
     mtr.enable =

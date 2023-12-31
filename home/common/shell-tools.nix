@@ -10,13 +10,14 @@
     sessionVariables = { };
   };
   
-  ######################################################################################################################
+  ##################################################################################################
   ##
-  ## By default Home Manager will install the package provided by your chosen inputs.nixpkgs (in your flake.nix)
-  ## but occasionally you might end up needing to change this package. This can typically be done in two ways.
+  ## By default Home Manager will install the package provided by your chosen inputs.nixpkgs (in
+  ## your flake.nix) but occasionally you might end up needing to change this package. This can
+  ## typically be done in two ways.
   ##
-  ##  - If the module provides a package option, such as programs.beets.package, then this is the recommended way
-  ##    to perform the override. For example:
+  ##  - If the module provides a package option, such as programs.beets.package, then this is the
+  ##    recommended way to perform the override. For example:
   ##
   ##      programs.XXX.package = pkgs.XXX.override { XXX = true; };
   ##
@@ -115,7 +116,7 @@
     };
   };
   
-  ######################################################################################################################
+  ##################################################################################################
   ## config files
   
   xdg.configFile = {
