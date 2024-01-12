@@ -3,7 +3,7 @@
     ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.11";
 
   # Bootloader
   boot = {
@@ -80,7 +80,7 @@
   # --------------------------------------------------------------------------------------------------------------------
 
   networking = {
-    hostName = "nixos"; # Define your hostname.
+    hostName = "bistromath"; # Define your hostname.
 
     networkmanager.enable = true;
     resolvconf.enable = true;

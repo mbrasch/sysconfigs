@@ -33,7 +33,12 @@
     
     localVariables = { };
     sessionVariables = { };
-    shellAliases = { };
+    
+    # An attribute set that maps aliases (the top level attribute names inthis option) to command
+    #   strings or directly to build outputs.
+    shellAliases = {
+      #fuck = "thefuck";
+    };
     
     # Similar to programs.zsh.shellAliases, but are substituted anywhere on a line.
     shellGlobalAliases = {
@@ -43,12 +48,15 @@
     
     #plugins = { ... };
 
+    # Commands that should be added to top of .zshrc.
     initExtraFirst = ''
       #${pkgs.fastfetch}/bin/fastfetch
       source ${config.xdg.configHome}/zsh/p10k.zsh
       source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
+      eval $(thefuck --alias)
     '';
     
+    # Extra commands that should be added to .zshrc.
     #initExtra = builtins.readFile ./p10k.zsh;
     initExtra = ''
       sce-run() {

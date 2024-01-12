@@ -38,6 +38,40 @@ sudo chmod u=rw,go=r /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hoo
 sudo launchctl load /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 ```
 
+### regular use
+
+Using Nix only as a package manager is very like using imperative package manager like apt & co.
+
+**search for a package**
+
+```shell
+nix search <search string>
+```
+
+**install a package**
+
+```shell
+nix profile install <package>
+```
+
+**list installed packages**
+
+```shell
+nix profile list
+```
+
+**remove a package**
+
+```shell
+nix profile remove <package>
+```
+
+**update packages**
+
+```shell
+nix profile update <package>
+```
+
 ### Uninstall
 
 ```shell
@@ -53,8 +87,6 @@ sudo rm /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 
 
 ---
-
-
 
 ## clone the repo
 
@@ -72,7 +104,7 @@ cp -R poc-nix-homemanager  ~/.config/home-manager
 
 ### customize configuration
 
- :warning:: you need to adjust the `username` and `system` in `./flake.nix`-> homeConfigurations.<username>. The `username` must be equal to your username on your system. In in this configuration, it is assumed that the home folder is named like the username. 
+ :warning: you need to adjust the `username` and `system` in `./flake.nix`-> homeConfigurations.<username>. The `username` must be equal to your username on your system. In in this configuration, it is assumed that the home folder is named like the username. 
 
 
 
@@ -82,7 +114,7 @@ cp -R poc-nix-homemanager  ~/.config/home-manager
 
 (for macOS, Linux, NixOS)
 
-### Bootstrap
+### bootstrap
 
 **build configuration**
 
@@ -96,7 +128,7 @@ nix build .#homeConfigurations.<username>.activationPackage
 ./result/activate
 ```
 
-### Regular use
+### regular use
 
 **update flake**
 
@@ -161,13 +193,11 @@ home-manager uninstall
 
 ---
 
-
-
 ## nix-darwin (optionally with home-manager)
 
-(for maOS only)
+(for macOS only)
 
-### Bootstrap
+### bootstrap
 
 ```shell
 # build the base configuration
@@ -188,9 +218,27 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 exec $SHELL
 ```
 
-Apply configuration
+### apply configuration changes
 
 ```shell
 darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
+```
+
+
+
+---
+
+## NixOS
+
+### bootstrap
+
+```shell
+
+```
+
+### apply configuration changes
+
+```shell
+nixos-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
 ```
 

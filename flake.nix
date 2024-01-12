@@ -229,7 +229,7 @@
         bistroserve = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit pkgs inputs; };
           modules = [
-            ./nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
+            ./nixos/common/nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
             ./nixos/bistroserve
             home-manager.nixosModules.home-manager
             {

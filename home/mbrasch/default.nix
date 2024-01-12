@@ -126,14 +126,17 @@ in {
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
       android-tools
       
-      cowsay
+      git
+      lazygit # simple terminal UI for git commands
+      git-absorb # git commit --fixup, but automatic
+      thefuck
       
       #------------------------------------------
       # languages
       
-      nodejs
+      nodejs_21
       nodePackages_latest.dockerfile-language-server-nodejs
-      nodePackages.npm
+      #nodePackages.npm
       
       python3Full
       python311Packages.black
