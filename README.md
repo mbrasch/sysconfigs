@@ -7,7 +7,7 @@
 (for macOS and Linux)
 
 ```shell
-# macOS: install the xcode command line tools
+# macOS only: install the xcode command line tools
 xcode-select --install
 
 # use alternative Nix installer with activated nix-command and flakes
@@ -20,7 +20,7 @@ exec $SHELL
 nix-shell -p nix-info --run "nix-info -m"
 ```
 
-### macOS: Troubleshooting
+### macOS: Fix the problem with the missing Nix hook after macOS system updates
 
 Unfortunately, macOS always overwrites the /etc/zshrc file during updates. This is a problem insofar as the hook for Nix is here (and has to be here). To circumvent this problem, you can use a launchd job to check on every system start whether this hook still exists and rewrite it if necessary:
 
@@ -40,7 +40,7 @@ sudo launchctl load /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook
 
 ### regular use
 
-Using Nix only as a package manager is very like using imperative package manager like apt & co.
+Using Nix only as a package manager is very like using imperative package manager like apt.
 
 **search for a package**
 
@@ -104,7 +104,10 @@ cp -R poc-nix-homemanager  ~/.config/home-manager
 
 ### customize configuration
 
- :warning: you need to adjust the `username` and `system` in `./flake.nix`-> homeConfigurations.<username>. The `username` must be equal to your username on your system. In in this configuration, it is assumed that the home folder is named like the username. 
+ :warning: you need to adjust some values in `./flake.nix`:
+
+- `username` and `system` in `homeConfigurations.<username>`. The `username` must be equal to your username on your system. In in this configuration, it is assumed that the home folder is named like the username.
+- `hostname` in `darwinConfiguration.<hostname>`. The `hostname` should be equal to the hostname of your system.
 
 
 

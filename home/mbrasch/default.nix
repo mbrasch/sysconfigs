@@ -1,9 +1,9 @@
-# Home Manager
+# homeConfiguration
 #
 # official docs:  https://nix-community.github.io/home-manager/
 # options search: https://mipmip.github.io/home-manager-option-search
 
-{ pkgs, config, osConfig, options, system, lib, username, inputs, outputs, specialArgs, ... }: 
+{ pkgs, config, osConfig, options, system, lib, username, inputs, outputs, ... }: 
 let
   homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
   
@@ -70,7 +70,7 @@ in {
       '';
     };
     
-    ###########################################################################
+    ################################################################################################
     # install this packages (they appear only in this users context)
     #
     # - via the 'with pkgs;' we can open a namespace so that we can omit the 'pkgs.' in front of
@@ -117,7 +117,7 @@ in {
       #tokei # modern wc for code
       tree # list directories in a tree
       wakeonlan
-      wimlib # extract, create, and modify WIM files
+      # wimlib # extract, create, and modify WIM files : build error
       coreutils # GNU Core Utilities
       davmail # Microsoft Exchange server as local CALDAV, IMAP and SMTP servers
       #figlet # make large letters out of ordinary text

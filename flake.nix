@@ -1,4 +1,6 @@
 {
+  ## for more infos about fflakes, see:
+  ##    https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake
   description = "Various Nix configurations for Darwin and NixOS";
 
   ##################################################################################################
@@ -151,6 +153,8 @@
   ##################################################################################################
   ## outputs
   ##
+  ## implicit attributes: outPath, rev, revCount, lastModifiedDate, lastModified, narHash
+  ##
   ## introspect   -> nix flake show
 
   outputs = { self, nixpkgs, nixos, nixos-hardware, darwin, home-manager, devenv, ... } @inputs: 
@@ -174,6 +178,23 @@
     in rec {
       
       ##############################################################################################
+      ## apps
+      ##
+      ##   nix run .#<name> [-- <args>]
+      
+      apps = {
+        "aarch64-darwin".default = {
+          type = "app";
+          program = "${packages.aarch64-darwin.default}/activate";
+        };
+        "x86_64-linux".default = {
+          type = "app";
+          program = "${packages.x86_64-linux.default}/activate";
+        };
+      };
+      
+      
+      ##############################################################################################
       ## packages
       ##
       ##   nix build .#<name>
@@ -183,9 +204,11 @@
         pkgs = nixpkgsFor.${system};
       in {
         hello = pkgs.hello; 
+        "aarch64-darwin".default = homeConfigurations.mbrasch-aarch64-darwin.activationPackage;
+        "x86_64-linux".default = homeConfigurations."work".activationPackage;
       });
-
-
+      
+      
       ##############################################################################################
       ## nixcasks
       ## in config use like:
@@ -229,7 +252,7 @@
         bistroserve = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit pkgs inputs; };
           modules = [
-            ./nixos/common/nix-nixpkgs-conf.nix # nix/nixpkgs configuration for stand-alone home manager installations
+            ./nixos/common/nix-nixpkgs-conf.nix
             ./nixos/bistroserve
             home-manager.nixosModules.home-manager
             {
@@ -254,16 +277,21 @@
       darwinConfigurations = forAllDarwinSystems ( system: let 
         pkgs = nixpkgsFor.${system};
       in {
+        
+        mbraschPriv = self.darwinConfigurations.mbrasch;
+        
         mbrasch = darwin.lib.darwinSystem {
-          specialArgs = { inherit pkgs inputs; };
+          specialArgs = { inherit self system pkgs inputs; };
           modules = [
             ./darwin/mbrasch
-            #{
-            #  home-manager.darwinModules.default    
-            #  home-manager.useGlobalPkgs = true;
-            #  home-manager.useUserPackages = true;
-            #  home-manager.users.mbrasch = import ./home/mbrasch;
-            #}
+            home-manager.darwinModules.home-manager
+            self.homeConfigurations.mbrasch-aarch64-darwin
+            # {
+            #   home-manager.useGlobalPkgs = true;
+            #   home-manager.useUserPackages = true;
+            #   home-manager.users.mbrasch = import ./home/mbrasch;
+            #   #home-manager.users.admin = import ./home/admin;
+            # }
           ];
         };
       });
