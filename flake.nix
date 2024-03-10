@@ -66,6 +66,11 @@
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     
+    # Run macOS, Windows and more via a single Nix command, or simple nixosModules
+    # documentation: https://github.com/matthewcroughan/NixThePlanet
+    nixtheplanet.url = "github:matthewcroughan/NixThePlanet";
+    nixtheplanet.inputs.nixpkgs.follows = "nixpkgs";
+    
     # Manage a user environment using Nix
     # documentation:  https://nix-community.github.io/home-manager/
     # options search: https://mipmip.github.io/home-manager-option-search

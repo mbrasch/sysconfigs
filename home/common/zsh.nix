@@ -59,12 +59,15 @@
     # Extra commands that should be added to .zshrc.
     #initExtra = builtins.readFile ./p10k.zsh;
     initExtra = ''
+      # zsh support for the nix run and nix-shell environments of the Nix package manager.
+      #${pkgs.any-nix-shell}/bin/any-nix-shell zsh --info-right | source /dev/stdin
+      
       sce-run() {
-        nix develop --impure git+ssh://azdops.serviceware.net/sw/Platform/Operations/_git/swops-sce-env#$1
+        nix develop --impure "git+ssh://azdops.serviceware.net/sw/Platform/Operations/_git/swops-sce-env#$1"
       }
       
       sce-show() {
-        nix flake show git+ssh://azdops.serviceware.net/sw/Platform/Operations/_git/swops-sce-env
+        nix flake show "git+ssh://azdops.serviceware.net/sw/Platform/Operations/_git/swops-sce-env"
       }
     '';
 

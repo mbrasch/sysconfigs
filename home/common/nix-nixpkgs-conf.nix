@@ -18,7 +18,7 @@
       
       extra-nix-path = "nixpkgs=flake:nixpkgs";
       system-features = [ "big-parallel" "kvm" ];
-      experimental-features = "nix-command flakes";
+      experimental-features = "nix-command flakes repl-flake";
       #allowed-users = "*";
     };
     

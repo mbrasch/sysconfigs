@@ -125,11 +125,15 @@ in {
       shell_gpt # ChatGPT in your terminal
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
       android-tools
+      asitop # Perf monitoring CLI tool for Apple Silicon
       
       git
       lazygit # simple terminal UI for git commands
       git-absorb # git commit --fixup, but automatic
       thefuck
+      inxi
+      #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
+           # nix-shell -p 'inxi.override { withRecommends = true; }' --run "sudo inxi -Fm" 
       
       #------------------------------------------
       # languages
@@ -138,12 +142,12 @@ in {
       nodePackages_latest.dockerfile-language-server-nodejs
       #nodePackages.npm
       
-      python3Full
-      python311Packages.black
-      python311Packages.flake8
-      python311Packages.pyls-isort
-      python311Packages.python-lsp-black
-      python311Packages.python-lsp-server
+      #python3Full
+      #python311Packages.black
+      #python311Packages.flake8
+      #python311Packages.pyls-isort
+      #python311Packages.python-lsp-black
+      #python311Packages.python-lsp-server
       
       rustc # rust compiler
       rustfmt # rust code formatter
@@ -168,9 +172,9 @@ in {
       #------------------------------------------
       # gui apps
       
-      diffuse # diff tool
-      meld # diff tool (on macos: start via shell)
-      qownnotes
+      #diffuse # diff tool
+      #meld # diff tool (on macos: start via shell)
+      #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration
     ];
     
   };
