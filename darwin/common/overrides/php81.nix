@@ -1,6 +1,14 @@
 self: super: {
   custom-php81 = super.pkgs.php81.buildEnv {
-    extensions = { all, enabled }: with all; enabled ++ [ sysvsem redis blackfire ];
+    extensions =
+      { all, enabled }:
+      with all;
+      enabled
+      ++ [
+        sysvsem
+        redis
+        blackfire
+      ];
     extraConfig = ''
       memory_limit = 2G
       pdo_mysql.default_socket=/tmp/mysql.sock

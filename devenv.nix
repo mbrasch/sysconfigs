@@ -1,4 +1,11 @@
-{ inputs, pkgs, system, self, ... } @ args: {
+{
+  inputs,
+  pkgs,
+  system,
+  self,
+  ...
+}@args:
+{
   name = "nixos-anywhere";
   devenv.debug = false;
   devenv.flakesIntegration = true;

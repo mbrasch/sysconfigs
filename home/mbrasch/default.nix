@@ -3,63 +3,70 @@
 # official docs:  https://nix-community.github.io/home-manager/
 # options search: https://mipmip.github.io/home-manager-option-search
 
-{ pkgs, config, osConfig, options, system, lib, username, inputs, outputs, ... }: 
+{
+  pkgs,
+  config,
+  osConfig,
+  options,
+  system,
+  lib,
+  username,
+  inputs,
+  outputs,
+  ...
+}:
 let
-  homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
-  
-in {
+  homeDirectory =
+    if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
+in
+{
   imports = [
     # You can split up your configuration and import pieces of it here:
     ../common/zsh.nix
     ../common/shell-tools.nix
-    
+    ../common/nix-nixpkgs-conf.nix
+
     # If you want to use modules your own flake exports (from modules/home-manager):
     #outputs.homeManagerModules.example
-    
+
     # Or modules exported from other flakes:
     #inputs.nix-colors.homeManagerModules.default
     #inputs.xhmm.homeManagerModules.console.all
     #inputs.stylix.homeManagerModules.stylix
-  ]; 
-
-
+  ];
 
   ##################################################################################################
   ## misc
-      
+
   xdg = {
     enable = true;
     #configHome = "${config.home.homeDirectory}/.config";
   };
-  
+
   manual = {
     manpages.enable = true;
     json.enable = false;
-  };  
-  
+  };
+
   news.display = "silent";
-  
-  
-  
+
   ##################################################################################################
   ## user home configuration
-  
+
   home = {
     username = username;
     homeDirectory = homeDirectory;
     stateVersion = "23.05";
-    
+
     enableDebugInfo = false;
-    
-    sessionPath = [
-      "$HOME/Library/Python/3.9/bin"
-    ];
-    
+
+    sessionPath = [ "$HOME/Library/Python/3.9/bin" ];
+
     sessionVariables = {
       #NIX_PATH = "$HOME/.hm-nixchannels";
     };
-    
-    file = { 
+
+    file = {
       #"${config.xdg.configHome}/neofetch/config.conf".text = builtins.readFile ./neofetch.conf;
     };
 
@@ -69,25 +76,36 @@ in {
         ${pkgs.nvd}/bin/nvd diff $oldGenPath $newGenPath
       '';
     };
-    
+
     ################################################################################################
     # install this packages (they appear only in this users context)
     #
     # - via the 'with pkgs;' we can open a namespace so that we can omit the 'pkgs.' in front of
     #   the package name.
     # - to search for packages you can use https://search.nixos.org/packages or 'nix-search'
-    
+
     packages = with pkgs; [
+      nixVersions.nix_2_21
+
       #------------------------------------------
       # fonts
-      
+
       # we don't need all nerdfonts, so we overwrite the list of fonts to install 
-      (nerdfonts.override { fonts = [ "Noto" "FiraCode" "SourceCodePro" "UbuntuMono" "Meslo" ]; })
+      (nerdfonts.override {
+        fonts = [
+          "Noto"
+          "FiraCode"
+          "SourceCodePro"
+          "UbuntuMono"
+          "Meslo"
+        ];
+      })
 
       #------------------------------------------
       # nix tools
-      
+
       inputs.nix-search.packages.${pkgs.system}.nix-search # CLI for searching packages on search.nixos.org
+      inputs.grep-nixos-cache.defaultPackage.${pkgs.system}
       alejandra # nix code formatter
       cachix # command line client for Nix binary cache hosting https://cachix.org
       nil # language server for nix
@@ -98,10 +116,9 @@ in {
       nix-output-monitor # parses output of nix-build to show additional information
       nix-tree # interactively browse a Nix store paths dependencies
       nixos-shell
-      nixfmt # nix formatter
+      nixfmt-rfc-style # nix formatter
       nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
-      #rnix-lsp # language server for nix
-      nixd  # language server for nix
+      nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
 
       #------------------------------------------
       # shell tools
@@ -112,8 +129,8 @@ in {
       ripgrep # modern grep
       mtr-gui # tracerout + ping
       #ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
-      fastfetch
-      #stectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
+      fastfetch # like neofetch, but much faster because written in C
+      #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
       #tokei # modern wc for code
       tree # list directories in a tree
       wakeonlan
@@ -126,75 +143,82 @@ in {
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
       android-tools
       asitop # Perf monitoring CLI tool for Apple Silicon
-      
+
       git
       lazygit # simple terminal UI for git commands
       git-absorb # git commit --fixup, but automatic
       thefuck
       inxi
       #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
-           # nix-shell -p 'inxi.override { withRecommends = true; }' --run "sudo inxi -Fm" 
-      
+      # nix-shell -p 'inxi.override { withRecommends = true; }' --run "sudo inxi -Fm" 
+
+      #------------------------------------------
+      # docker
+
+      #docker
+      #docker-compose
+      #dockerfile-language-server-nodejs
+      #docker-compose-language-service
+
       #------------------------------------------
       # languages
-      
-      nodejs_21
-      nodePackages_latest.dockerfile-language-server-nodejs
-      #nodePackages.npm
-      
-      #python3Full
-      #python311Packages.black
-      #python311Packages.flake8
-      #python311Packages.pyls-isort
+
+      nodejs
+      mermaid-cli
+
+      #( python311Full.withPackages ( p: with p; [ black flake8 pyls-isort ] ) )
+      python311Full
+      #( with python311Packages; [ black flake8 pyls-isort ] )
+      python311Packages.black
+      python311Packages.flake8
+      python311Packages.pyls-isort
       #python311Packages.python-lsp-black
       #python311Packages.python-lsp-server
-      
+
       rustc # rust compiler
       rustfmt # rust code formatter
       clippy
       cargo
-      
+
       shellcheck # shell script analysis tool
       shfmt # shell parser and formatter
-      
-      terraform
-      terraform-ls
-      
+
       go
       gopls # language server
       delve # debugger
-      
+
       jq # command-line JSON processor
       jiq # interactive jq
       yq-go # jq for yaml
-      
+
+      ollama
+      aichat
+
+      vimPlugins.copilot-vim # for "Copilot for Xcode"
 
       #------------------------------------------
       # gui apps
-      
+
       #diffuse # diff tool
       #meld # diff tool (on macos: start via shell)
       #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration
     ];
-    
   };
-  
-  
-  
+
   ##################################################################################################
   ## program configurations
-  
+
   programs = {
     home-manager = {
       enable = true;
       #path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
       path = pkgs.lib.mkForce "/Volumes/Shared/Repositories/Privat/sysconfigs";
     };
-    
+
     git = {
       enable = false;
     };
-    
+
     ssh = {
       enable = false;
       matchBlocks = {
@@ -208,7 +232,7 @@ in {
         # };
       };
     };
-        
+
     vscode = {
       enable = false;
       enableUpdateCheck = false;
@@ -223,33 +247,26 @@ in {
       ];
     };
   };
-  
-  
-  
+
   ##################################################################################################
   ## services
-  
+
   services = {
-    
+
   };
-
-
 
   ##################################################################################################
   ## systemd
-  
+
   launchd = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    
+
   };
 
-
-  
   ##################################################################################################
   ## systemd
-  
+
   systemd = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     # Nicely reload system units when changing configs
     user.startServices = "sd-switch";
   };
-  
 }

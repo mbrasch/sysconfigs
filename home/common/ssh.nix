@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   home.programs.ssh = {
@@ -26,5 +31,4 @@
     #  #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
     #'';
   };
-
 }

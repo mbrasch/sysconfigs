@@ -1,4 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
@@ -7,7 +13,7 @@
 
   # Bootloader
   boot = {
-    binfmt.emulatedSystems = ["aarch64-linux"];
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
 
     loader = {
       systemd-boot.enable = true;
@@ -18,7 +24,11 @@
 
   nix = {
     settings = {
-      allowed-users = ["root" "mike" "builder"];
+      allowed-users = [
+        "root"
+        "mike"
+        "builder"
+      ];
       #extra-platforms = [ "aarch64-linux" ];
       auto-optimise-store = true;
     };
@@ -110,12 +120,15 @@
     enable = false;
     dnssec = "allow-downgrade";
     llmnr = "true";
-    domains = ["local"];
+    domains = [ "local" ];
     extraConfig = ''
       DNSOverTLS=opportunistic
       MulticastDNS=yes
     '';
-    fallbackDns = ["9.9.9.9" "2620:fe::fe"]; # quad9
+    fallbackDns = [
+      "9.9.9.9"
+      "2620:fe::fe"
+    ]; # quad9
   };
 
   services.avahi = {
@@ -132,7 +145,9 @@
 
   services.openssh = {
     enable = true;
-    settings = {PermitRootLogin = "prohibit-password";};
+    settings = {
+      PermitRootLogin = "prohibit-password";
+    };
   };
 
   services.openvpn.servers = {
@@ -175,11 +190,13 @@
     desktopManager = {
       pantheon = {
         enable = true;
-        extraWingpanelIndicators = [];
-        extraSwitchboardPlugs = [];
+        extraWingpanelIndicators = [ ];
+        extraSwitchboardPlugs = [ ];
       };
 
-      plasma5 = {enable = false;};
+      plasma5 = {
+        enable = false;
+      };
     };
   };
 
@@ -199,9 +216,9 @@
     pulse.enable = true;
     jack.enable = false;
   };
-  
+
   # --------------------------------------------------------------------------------------------------------------------
-  
+
   services.paperless = {
     enable = true;
     user = "paperless";
@@ -213,13 +230,16 @@
     mediaDir = "${config.services.paperless.dataDir}/media";
     consumptionDir = "${config.services.paperless.dataDir}/consume";
     consumptionDirIsPublic = false;
-    
+
     # configuration options: https://docs.paperless-ngx.com/configuration/
     extraConfig = {
       PAPERLESS_OCR_LANGUAGE = "deu+eng";
       PAPERLESS_DBHOST = "/run/postgresql";
-      PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [ ".DS_STORE/*" "desktop.ini" ];
-      
+      PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [
+        ".DS_STORE/*"
+        "desktop.ini"
+      ];
+
       PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
         optimize = 1;
         pdfa_image_compression = "lossless";
@@ -230,7 +250,16 @@
   # --------------------------------------------------------------------------------------------------------------------
 
   environment = {
-    systemPackages = with pkgs; [firefox git curl bat fzf btop dig nmap];
+    systemPackages = with pkgs; [
+      firefox
+      git
+      curl
+      bat
+      fzf
+      btop
+      dig
+      nmap
+    ];
     variables = {
       QT_QPA_PLATFORM_PLUGIN_PATH = "${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
     };
@@ -252,7 +281,10 @@
     mike = {
       isNormalUser = true;
       description = "Mike";
-      extraGroups = ["networkmanager" "wheel"];
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+      ];
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgHtj1nylquRLIyn3gYen2cKuZZyujw5ipkgPez4jeD mike.brasch@sabio.de"
@@ -273,8 +305,7 @@
   # --------------------------------------------------------------------------------------------------------------------
 
   programs = {
-    mtr.enable =
-      false; # Some programs need SUID wrappers, can be configured further or are started in user sessions.
+    mtr.enable = false; # Some programs need SUID wrappers, can be configured further or are started in user sessions.
 
     command-not-found.enable = false;
 
@@ -292,12 +323,15 @@
       autosuggestions = {
         enable = true;
         async = true;
-        strategy = ["completion" "history"];
+        strategy = [
+          "completion"
+          "history"
+        ];
       };
 
       syntaxHighlighting = {
         enable = true;
-        highlighters = ["main"]; # main, brackets, pattern, cursor, regexp, root, line
+        highlighters = [ "main" ]; # main, brackets, pattern, cursor, regexp, root, line
       };
 
       shellAliases = {

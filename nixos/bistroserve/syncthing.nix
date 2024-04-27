@@ -1,4 +1,5 @@
-{ config, ... } : {
+{ config, ... }:
+{
   services.syncthing = {
     enable = false;
     user = "syncthing";
@@ -12,12 +13,12 @@
     cert = null;
     overrideDevices = false;
     overrideFolders = false;
-    
-    extraFlags = [  ];
+
+    extraFlags = [ ];
 
     ################################################################################################
     ## options
-    
+
     settings.options = {
       urAccepted = -1; # don't submit anonymous usage data
       relaysEnabled = null;
@@ -26,29 +27,29 @@
       localAnnounceEnabled = null;
       limitBandwidthInLan = null;
     };
-    
+
     ################################################################################################
     ## devices
-      
+
     settings.devices = {
       mbraschPriv = {
         #name = "mbraschPriv";
         id = "RGRYHVN-UOAZZOR-ZH4XADO-YTM4AKY-XJPFFXB-H5OOI2K-D2FBNQX-UCEMJAL";
         autoAcceptFolders = false;
       };
-      
+
       mbrasch = {
         #name = "mbrasch";
         id = "64GYC4O-HEAMPBM-J73ZMSS-3BWQYTO-AWDP5RZ-JBCKD5V-JC37CW6-QJ6MEQB";
         autoAcceptFolders = false;
       };
-      
+
       zaphod = {
         #name = "zaphod";
         id = "VPOVBSH-CNLRK65-6NBFBLL-MDHBSWW-G63PYFP-UBAITXD-R66B5HP-MNAYNAB";
         autoAcceptFolders = false;
       };
-      
+
       wowbagger = {
         #name = "wowbagger";
         id = "QP2CMAJ-S47IXCG-EXTX3PJ-C7PIOH5-6ELBBL6-AI4JWPS-DNZKJLJ-LO32ZQW";
@@ -58,7 +59,7 @@
 
     ################################################################################################
     ## folders
-    
+
     settings.folders = {
       Keepass = {
         enable = true;
@@ -78,8 +79,7 @@
 
     ################################################################################################
     ## relay
-    
-    settings.relay = {  };
-  };
 
+    settings.relay = { };
+  };
 }

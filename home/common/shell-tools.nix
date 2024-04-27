@@ -1,4 +1,5 @@
-{ pkgs, config, ... }: {
+{ pkgs, config, ... }:
+{
   home = {
     shellAliases = {
       hms = "home-manager switch --flake ${config.programs.home-manager.path}";
@@ -6,10 +7,10 @@
       hmgc = "home-manager generations expire-generations '-1 days'";
       hmpush = "cd ${config.programs.home-manager.path} && git commit -a -m '.' && git push";
     };
-    
+
     sessionVariables = { };
   };
-  
+
   ##################################################################################################
   ##
   ## By default Home Manager will install the package provided by your chosen inputs.nixpkgs (in
@@ -33,16 +34,27 @@
   ##    at the top, in the function header, are the parameters that can be overwritten.
   ##
   ##  - ööööööhmmmm… I have forgotten the othe way. :)
-  
+
   programs = {
-    bat = { # modern variant of cat
+    atuin = {
+      enable = false;
+      enableZshIntegration = true;
+      enableBashIntegration = true;
+    };
+
+    bat = {
+      # modern variant of cat
       enable = true;
       config = { };
       themes = { };
-      extraPackages = with pkgs.bat-extras; [ batwatch prettybat ];
+      extraPackages = with pkgs.bat-extras; [
+        batwatch
+        prettybat
+      ];
     };
 
-    broot = { # interactively traverse throug your filesystem tree
+    broot = {
+      # interactively traverse throug your filesystem tree
       enable = true;
       settings = {
         modal = true;
@@ -50,8 +62,9 @@
         verbs = [ ];
       };
     };
-    
-    bottom = { # system monitor like top. command: btm
+
+    bottom = {
+      # system monitor like top. command: btm
       enable = true;
       settings = {
         colors = {
@@ -76,38 +89,46 @@
         };
       };
     };
-    
-    lsd = { # modern ls
+
+    lsd = {
+      # modern ls
       enable = true;
       enableAliases = true;
     };
-    
-    fzf = { # fuzzy finder
+
+    fzf = {
+      # fuzzy finder
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
-        
-    nix-index = { # commands: nix-index, nix-locate
+
+    nix-index = {
+      # commands: nix-index, nix-locate
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
-    
+
     direnv = {
       enable = true;
       nix-direnv.enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
-      config = {  };
+      config = { };
     };
-    
+
     info.enable = true;
     tealdeer.enable = true;
-    
+
     gh = {
       enable = false;
-      extensions = with pkgs; [ gh-markdown-preview gh-dash gh-actions-cache gh-eco ];
+      extensions = with pkgs; [
+        gh-markdown-preview
+        gh-dash
+        gh-actions-cache
+        gh-eco
+      ];
       settings = {
         editor = "nano";
         git_protocol = "ssh";
@@ -115,10 +136,10 @@
       };
     };
   };
-  
+
   ##################################################################################################
   ## config files
-  
+
   xdg.configFile = {
     foo = {
       enable = false;
@@ -126,5 +147,4 @@
       source = ./configs/foo.conf;
     };
   };
-
 }
