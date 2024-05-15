@@ -149,9 +149,19 @@
     nix.url = "github:nixos/nix";
     nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process
+    nix-fast-build.url = "github:Mic92/nix-fast-build";
+    nix-fast-build.inputs.nixpkgs.follows = "nixpkgs";
+
     # Finds strings in a large list of cached NixOS store paths
     grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
     grep-nixos-cache.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Experimental nix expression to package all MacOS casks from homebrew automatically
+    brew-nix.url = "github:BatteredBunny/brew-nix";
+    brew-nix.inputs.nixpkgs.follows = "nixpkgs";
+    brew-api.url = "github:BatteredBunny/brew-api";
+    brew-api.flake = false;
   };
 
   ##################################################################################################

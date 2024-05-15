@@ -35,6 +35,10 @@ in
     #inputs.stylix.homeManagerModules.stylix
   ];
 
+  #nixpkgs = {
+  #  overlays = [ inputs.brew-nix.overlay.${builtins.currentSystem} ];
+  #};
+
   ##################################################################################################
   ## misc
 
@@ -51,6 +55,13 @@ in
   news.display = "silent";
 
   ##################################################################################################
+  ## nixpkgs
+
+  # nixpkgs = {
+  #   overlays = [ inputs.brew-nix.overlay.${pkgs.builtins.currentSystem} ];
+  # };
+
+  ##################################################################################################
   ## user home configuration
 
   home = {
@@ -60,10 +71,11 @@ in
 
     enableDebugInfo = false;
 
-    sessionPath = [ "$HOME/Library/Python/3.9/bin" ];
+    sessionPath = [ ];
 
     sessionVariables = {
       #NIX_PATH = "$HOME/.hm-nixchannels";
+      EDITOR = "nano";
     };
 
     file = {
@@ -85,7 +97,7 @@ in
     # - to search for packages you can use https://search.nixos.org/packages or 'nix-search'
 
     packages = with pkgs; [
-      nixVersions.nix_2_21
+      nixVersions.latest
 
       #------------------------------------------
       # fonts
@@ -106,19 +118,21 @@ in
 
       inputs.nix-search.packages.${pkgs.system}.nix-search # CLI for searching packages on search.nixos.org
       inputs.grep-nixos-cache.defaultPackage.${pkgs.system}
-      alejandra # nix code formatter
+      #inputs.nix-fast-build.packages.${pkgs.system}.nix-fast-build
+
       cachix # command line client for Nix binary cache hosting https://cachix.org
-      nil # language server for nix
       nix-diff # explain why two Nix derivations differ
       nix-info # get high level info to help with debugging
       nix-init # generate Nix packages from URLs
       nix-melt # ranger-like flake.lock viewer
       nix-output-monitor # parses output of nix-build to show additional information
       nix-tree # interactively browse a Nix store paths dependencies
+      nix-inspect # interactive TUI for inspecting nix configs and other expressions
       nixos-shell
       nixfmt-rfc-style # nix formatter
       nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
       nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
+      devenv
 
       #------------------------------------------
       # shell tools
@@ -128,10 +142,10 @@ in
       gping # ping with graph
       ripgrep # modern grep
       mtr-gui # tracerout + ping
-      #ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
+      ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
       fastfetch # like neofetch, but much faster because written in C
       #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
-      #tokei # modern wc for code
+      tokei # modern wc for code
       tree # list directories in a tree
       wakeonlan
       # wimlib # extract, create, and modify WIM files : build error
@@ -139,7 +153,7 @@ in
       davmail # Microsoft Exchange server as local CALDAV, IMAP and SMTP servers
       #figlet # make large letters out of ordinary text
       helix # post-modern modal text editor
-      shell_gpt # ChatGPT in your terminal
+      shell-gpt # ChatGPT in your terminal
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
       android-tools
       asitop # Perf monitoring CLI tool for Apple Silicon
@@ -148,17 +162,20 @@ in
       lazygit # simple terminal UI for git commands
       git-absorb # git commit --fixup, but automatic
       thefuck
+
       inxi
       #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
-      # nix-shell -p 'inxi.override { withRecommends = true; }' --run "sudo inxi -Fm" 
+
+      ollama
+      aichat
 
       #------------------------------------------
       # docker
 
-      #docker
-      #docker-compose
-      #dockerfile-language-server-nodejs
-      #docker-compose-language-service
+      docker
+      docker-compose
+      dockerfile-language-server-nodejs
+      docker-compose-language-service
 
       #------------------------------------------
       # languages
@@ -166,14 +183,21 @@ in
       nodejs
       mermaid-cli
 
-      #( python311Full.withPackages ( p: with p; [ black flake8 pyls-isort ] ) )
-      python311Full
-      #( with python311Packages; [ black flake8 pyls-isort ] )
-      python311Packages.black
-      python311Packages.flake8
-      python311Packages.pyls-isort
+      (python3.withPackages (p: [
+        p.black
+        p.flake8
+        p.pyls-isort
+        p.python-lsp-black
+        p.python-lsp-server
+      ]))
+      #python3Full
+      #python3Packages.black
+      #python3Packages.flake8
+      #python3Packages.pyls-isort
       #python311Packages.python-lsp-black
       #python311Packages.python-lsp-server
+
+      clang-tools_18
 
       rustc # rust compiler
       rustfmt # rust code formatter
@@ -191,9 +215,6 @@ in
       jiq # interactive jq
       yq-go # jq for yaml
 
-      ollama
-      aichat
-
       vimPlugins.copilot-vim # for "Copilot for Xcode"
 
       #------------------------------------------
@@ -202,6 +223,16 @@ in
       #diffuse # diff tool
       #meld # diff tool (on macos: start via shell)
       #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration
+
+      #------------------------------------------
+      # brew casks (via brew-nix)
+
+      #brewCasks.marta
+
+      #------------------------------------------
+      # my own packages
+
+      #( pkgs.callPackage ./pkgs/foobar.nix )
     ];
   };
 
