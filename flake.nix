@@ -324,10 +324,7 @@
           pkgs = nixpkgsFor.${system};
         in
         {
-
-          trillian = self.darwinConfigurations.mbrasch;
-
-          mbrasch = darwin.lib.darwinSystem {
+          trillian = darwin.lib.darwinSystem {
             specialArgs = {
               inherit
                 self

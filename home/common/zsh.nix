@@ -63,7 +63,10 @@
     initExtra = ''
       # zsh support for the nix run and nix-shell environments of the Nix package manager.
       #${pkgs.any-nix-shell}/bin/any-nix-shell zsh --info-right | source /dev/stdin
-      (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"')
+
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+
+      test -e ${config.xdg.configHome}/zsh/iterm2_shell_integration.zsh && source ${config.xdg.configHome}/zsh/iterm2_shell_integration.zsh || true
     '';
 
     prezto = {
@@ -121,6 +124,12 @@
       enable = true;
       source = ./configs/p10k.zsh;
       target = "./zsh/p10k.zsh";
+    };
+
+    powerlevel10k = {
+      enable = true;
+      source = ./configs/iterm2_shell_integration.zsh;
+      target = "./zsh/iterm2_shell_integration.zsh";
     };
   };
 }
