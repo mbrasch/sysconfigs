@@ -1,6 +1,7 @@
 {
-  ## for more infos about fflakes, see:
+  ## for more infos about flakes, see:
   ##    https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake
+
   description = "Various Nix configurations for Darwin and NixOS";
 
   ##################################################################################################

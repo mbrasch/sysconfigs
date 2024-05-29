@@ -170,6 +170,12 @@ in
       aichat
 
       #------------------------------------------
+      # https://libimobiledevice.org
+
+      #idevicerestore # Restore/upgrade firmware of iOS and macOS/AS devices
+      #ideviceinstaller # List/modify installed apps of iOS devices
+
+      #------------------------------------------
       # docker
 
       docker
