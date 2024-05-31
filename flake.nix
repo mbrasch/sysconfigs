@@ -52,10 +52,14 @@
     nixos.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    # Externally extensible flake systems
+    # documentation: https://github.com/nix-systems/nix-systems
+    systems.url = "github:nix-systems/default";
+
     # Homebrew casks, nixified
     # documentation: https://github.com/jacekszymanski/nixcasks/
-    nixcasks.url = "github:jacekszymanski/nixcasks";
-    nixcasks.inputs.nixpkgs.follows = "nixpkgs";
+    #nixcasks.url = "github:jacekszymanski/nixcasks";
+    #nixcasks.inputs.nixpkgs.follows = "nixpkgs";
 
     # nix modules for darwin (the equivalent of NixOS modules for macOS)
     # documentation: https://daiderd.com/nix-darwin
@@ -87,14 +91,10 @@
     # documentation: source code -> https://github.com/chessai/nix-std/
     nix-std.url = "github:chessai/nix-std";
 
-    # A command-line tool written in Rust to search for torrents on piratebay
-    piratebay.url = "github:tsirysndr/piratebay";
-    piratebay.inputs.nixpkgs.follows = "nixpkgs";
-
     # Minimal Markdown Documentation
     # documentation: https://ryantm.github.io/mmdoc/
-    mmdoc.url = "github:ryantm/mmdoc";
-    mmdoc.inputs.nixpkgs.follows = "nixpkgs";
+    #mmdoc.url = "github:ryantm/mmdoc";
+    #mmdoc.inputs.nixpkgs.follows = "nixpkgs";
 
     # Atomic, declarative, and reproducible secret provisioning for NixOS based on sops.
     # documentation: https://github.com/Mic92/sops-nix
@@ -123,16 +123,16 @@
 
     # Extra home manager modules
     # documentation: https://github.com/schuelermine/xhmm
-    xhmm.url = "github:schuelermine/xhmm";
+    #xhmm.url = "github:schuelermine/xhmm";
 
     # System-wide colorscheming and typography for NixOS and Home Manager
     # documentation: https://danth.github.io/stylix/
-    stylix.url = "github:danth/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
+    #stylix.url = "github:danth/stylix";
+    #stylix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Modules and schemes to make theming with Nix awesome.
     # documentation: https://github.com/misterio77/nix-colors
-    nix-colors.url = "github:misterio77/nix-colors";
+    #nix-colors.url = "github:misterio77/nix-colors";
 
     # NixOS MicroVMs
     # documentation: https://astro.github.io/microvm.nix/
@@ -147,22 +147,22 @@
     attic.inputs.nixpkgs-stable.follows = "nixpkgs";
 
     # for the Nix docker image
-    nix.url = "github:nixos/nix";
-    nix.inputs.nixpkgs.follows = "nixpkgs";
+    #nix.url = "github:nixos/nix";
+    #nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process
     nix-fast-build.url = "github:Mic92/nix-fast-build";
     nix-fast-build.inputs.nixpkgs.follows = "nixpkgs";
 
     # Finds strings in a large list of cached NixOS store paths
-    grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
-    grep-nixos-cache.inputs.nixpkgs.follows = "nixpkgs";
+    #grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
+    #grep-nixos-cache.inputs.nixpkgs.follows = "nixpkgs";
 
     # Experimental nix expression to package all MacOS casks from homebrew automatically
-    brew-nix.url = "github:BatteredBunny/brew-nix";
-    brew-nix.inputs.nixpkgs.follows = "nixpkgs";
-    brew-api.url = "github:BatteredBunny/brew-api";
-    brew-api.flake = false;
+    #brew-nix.url = "github:BatteredBunny/brew-nix";
+    #brew-nix.inputs.nixpkgs.follows = "nixpkgs";
+    #brew-api.url = "github:BatteredBunny/brew-api";
+    #brew-api.flake = false;
   };
 
   ##################################################################################################
@@ -352,7 +352,7 @@
       ##############################################################################################
       ## homeConfigurations
       ##
-      ## stand-alone (darwin or normal linux distribution)
+      ## stand-alone (darwin, NixOS and normal linux distributions)
       ##   IMPORTANT: only use each home configuration when logged in to the respective user account
       ##
       ## initial installation:

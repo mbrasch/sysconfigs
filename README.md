@@ -2,9 +2,17 @@
 
 [TOC]
 
-## Install Nix
+## introduction
+
+@TODO
+
+---
+
+## install Nix
 
 (for macOS and Linux)
+
+I use the [DetSys Nix installer](https://zero-to-nix.com/start/install) here. Firstly because it is easier to uninstall and secondly because the experimental features "nix-command" and "flakes" are active by default. Nix can of course also be installed from the [original installer](https://nixos.org/download/). (But then don't forget to activate the two experimental features).
 
 ```shell
 # macOS only: install the xcode command line tools
@@ -20,7 +28,7 @@ exec $SHELL
 nix-shell -p nix-info --run "nix-info -m"
 ```
 
-### macOS: Fix the problem with the missing Nix hook after macOS system updates
+### macOS: fix the problem with the missing Nix hook after system updates
 
 Unfortunately, macOS always overwrites the /etc/zshrc file during updates. This is a problem insofar as the hook for Nix is here (and has to be here). To circumvent this problem, you can use a launchd job to check on every system start whether this hook still exists and rewrite it if necessary:
 
@@ -72,6 +80,8 @@ nix profile update <package>
 
 ### Uninstall
 
+If Nix was installed via the original installer, manual work is required. More on this in the [Nix manual](https://nix.dev/manual/nix/2.22/installation/uninstall). If the DetSys installer was used, it is easy:
+
 ```shell
 # if you have installed the launchd job `check-zshrc-nix-hook.plist`
 # (from section `troubleshooting`):
@@ -86,18 +96,20 @@ sudo rm /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 
 ---
 
-## clone the repo
+## clone this repo
 
 (for macOS, Linux and NixOS)
 
-### clone the repo
+### clone this repo
 
-clone repo and copy its contents to ~/.config/home-manager
+the destination directory depends on the specific case. @TODO
+
+- for home-manager stand-alone: `~/.config/home-manager`
+- for nix-darwin (incl. home-manager): `@TODO`
+- for NixOS (incl. home-manager): `/etc/nixos`
 
 ```shell
-git clone git@github.com:mbrasch/sysconfigs.git
-mkdir -p ~/.config/home-manager
-cp -R poc-nix-homemanager  ~/.config/home-manager
+git clone git@github.com:mbrasch/sysconfigs.git <destination>
 ```
 
 ### customize configuration
@@ -117,15 +129,11 @@ cp -R poc-nix-homemanager  ~/.config/home-manager
 
 ### bootstrap
 
-**build configuration**
-
 ```shell
+# build configuration
 nix build .#homeConfigurations.<username>.activationPackage
-```
 
-**apply configuration**
-
-```shell
+# apply configuration
 ./result/activate
 ```
 
@@ -219,7 +227,9 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 exec $SHELL
 ```
 
-### apply configuration changes
+### regular use
+
+**apply configuration changes**
 
 ```shell
 darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
@@ -237,7 +247,9 @@ darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
 
 ```
 
-### apply configuration changes
+### regular use
+
+**apply configuration changes**
 
 ```shell
 nixos-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch

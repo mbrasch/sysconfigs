@@ -8,7 +8,7 @@
   config,
   osConfig,
   options,
-  system,
+  #system,
   lib,
   username,
   inputs,
@@ -16,6 +16,7 @@
   ...
 }:
 let
+  system = pkgs.system;
   homeDirectory =
     if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
 in
@@ -116,8 +117,8 @@ in
       #------------------------------------------
       # nix tools
 
-      inputs.nix-search.packages.${pkgs.system}.nix-search # CLI for searching packages on search.nixos.org
-      inputs.grep-nixos-cache.defaultPackage.${pkgs.system}
+      inputs.nix-search.packages.${system}.nix-search # CLI for searching packages on search.nixos.org
+      #inputs.grep-nixos-cache.defaultPackage.${system}
       #inputs.nix-fast-build.packages.${pkgs.system}.nix-fast-build
 
       cachix # command line client for Nix binary cache hosting https://cachix.org
