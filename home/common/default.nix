@@ -11,5 +11,6 @@
     ./shell-tools.nix
     ./ssh.nix
     ./zsh.nix
+    ./dotfiles.nix
   ];
 }

@@ -136,15 +136,4 @@
       };
     };
   };
-
-  ##################################################################################################
-  ## config files
-
-  xdg.configFile = {
-    foo = {
-      enable = false;
-      source = ./dotfiles/foo.conf;
-      target = "./foo/config.conf";
-    };
-  };
 }
