@@ -2,15 +2,30 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 {
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
     ./syncthing.nix
+    #(builtins.fromTOML (builtins.readFile ./myconfig.toml))
   ];
 
-  system.stateVersion = "23.11";
+  system = {
+    stateVersion = "23.11";
+    autoUpgrade = {
+      enable = false;
+      flake = inputs.self.outPath;
+      flags = [
+        "--update-input"
+        "nixpkgs"
+        "-L"
+      ];
+      dates = "09:00";
+      randomizedDelaySec = "45min";
+    };
+  };
 
   # Bootloader
   boot = {
@@ -251,6 +266,18 @@
 
   # ------------------------------------------------------------------------------------------------
 
+  systemd.services.irc = {
+    serviceConfig = {
+      Type = "simple";
+      User = "oatman";
+      ExecStart = "screen -dmS irc irssi";
+      ExecStop = "screen -S irc -X quit";
+      wantedBy = [ "multi-user.target" ];
+    };
+  };
+
+  # ------------------------------------------------------------------------------------------------
+
   environment = {
     systemPackages = with pkgs; [
       firefox
@@ -310,6 +337,14 @@
     mtr.enable = false; # Some programs need SUID wrappers, can be configured further or are started in user sessions.
 
     command-not-found.enable = false;
+
+    # lets you run prebuilt dynamicly linked binaries in a "virtual" environment with given libs
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+
+      ];
+    };
 
     gnupg.agent = {
       enable = false;

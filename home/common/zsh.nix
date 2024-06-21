@@ -52,7 +52,7 @@
 
     # Commands that should be added to top of .zshrc.
     initExtraFirst = ''
-      ${pkgs.macchina}/bin/macchina
+      ${pkgs.fastfetch}/bin/fastfetch
       source ${config.xdg.configHome}/zsh/p10k.zsh
       source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
       eval $(thefuck --alias)
@@ -114,33 +114,33 @@
 
   xdg.configFile = {
     fastfetch = {
-      enable = false;
-      source = ./configs/fastfetch.jsonc;
+      enable = true;
+      source = ./dotfiles/fastfetch.jsonc;
       target = "./fastfetch/config.jsonc";
     };
 
     macchina = {
-      enable = true;
-      source = ./configs/macchina.toml;
+      enable = false;
+      source = ./dotfiles/macchina.toml;
       target = "./macchina/macchina.toml";
     };
 
     powerlevel10k = {
       enable = true;
-      source = ./configs/p10k.zsh;
+      source = ./dotfiles/p10k.zsh;
       target = "./zsh/p10k.zsh";
     };
 
     iterm2_shell_integration = {
       enable = true;
-      source = ./configs/.iterm2_shell_integration.zsh;
+      source = ./dotfiles/.iterm2_shell_integration.zsh;
       target = "./zsh/.iterm2_shell_integration.zsh";
     };
 
     iterm2 = {
       enable = true;
       recursive = true;
-      source = ./configs/.iterm2;
+      source = ./dotfiles/.iterm2;
       target = "./zsh/.iterm2";
     };
   };

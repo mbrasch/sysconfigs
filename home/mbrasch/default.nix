@@ -25,7 +25,7 @@ in
     # You can split up your configuration and import pieces of it here:
     ../common/zsh.nix
     ../common/shell-tools.nix
-    ../common/nix-nixpkgs-conf.nix
+    #../common/nix-nixpkgs-conf.nix
 
     # If you want to use modules your own flake exports (from modules/home-manager):
     #outputs.homeManagerModules.example
@@ -143,8 +143,9 @@ in
       gping # ping with graph
       ripgrep # modern grep
       mtr-gui # tracerout + ping
-      ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
+      #ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
       fastfetch # like neofetch, but much faster because written in C
+      #macchina # like neofetch, but much faster because written in Rust
       #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
       tokei # modern wc for code
       tree # list directories in a tree

@@ -55,7 +55,7 @@
 
     broot = {
       # interactively traverse throug your filesystem tree
-      enable = true;
+      enable = false;
       settings = {
         modal = true;
         skin = { };
@@ -143,8 +143,8 @@
   xdg.configFile = {
     foo = {
       enable = false;
+      source = ./dotfiles/foo.conf;
       target = "./foo/config.conf";
-      source = ./configs/foo.conf;
     };
   };
 }

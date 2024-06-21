@@ -52,31 +52,47 @@
     nixos.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # Externally extensible flake systems
-    # documentation: https://github.com/nix-systems/nix-systems
-    systems.url = "github:nix-systems/default";
-
-    # Homebrew casks, nixified
-    # documentation: https://github.com/jacekszymanski/nixcasks/
-    #nixcasks.url = "github:jacekszymanski/nixcasks";
-    #nixcasks.inputs.nixpkgs.follows = "nixpkgs";
-
     # nix modules for darwin (the equivalent of NixOS modules for macOS)
     # documentation: https://daiderd.com/nix-darwin
     # options:       https://daiderd.com/nix-darwin/manual
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Run macOS, Windows and more via a single Nix command, or simple nixosModules
-    # documentation: https://github.com/matthewcroughan/NixThePlanet
-    nixtheplanet.url = "github:matthewcroughan/NixThePlanet";
-    nixtheplanet.inputs.nixpkgs.follows = "nixpkgs";
+    # Homebrew installation manager for nix-darwin
+    # documentation: https://github.com/zhaofengli/nix-homebrew
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    homebrew-core.url = "github:homebrew/homebrew-core";
+    homebrew-core.flake = false;
+    homebrew-bundle.url = "github:homebrew/homebrew-bundle";
+    homebrew-bundle.flake = false;
+    homebrew-cask.url = "github:homebrew/homebrew-cask";
+    homebrew-cask.flake = false;
+
+    # Homebrew casks, nixified
+    # documentation: https://github.com/jacekszymanski/nixcasks/
+    #nixcasks.url = "github:jacekszymanski/nixcasks";
+    #nixcasks.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Experimental nix expression to package all MacOS casks from homebrew automatically
+    #brew-nix.url = "github:BatteredBunny/brew-nix";
+    #brew-nix.inputs.nixpkgs.follows = "nixpkgs";
+    #brew-api.url = "github:BatteredBunny/brew-api";
+    #brew-api.flake = false;
 
     # Manage a user environment using Nix
     # documentation:  https://nix-community.github.io/home-manager/
     # options search: https://mipmip.github.io/home-manager-option-search
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Externally extensible flake systems
+    # documentation: https://github.com/nix-systems/nix-systems
+    systems.url = "github:nix-systems/default";
+
+    # Run macOS, Windows and more via a single Nix command, or simple nixosModules
+    # documentation: https://github.com/matthewcroughan/NixThePlanet
+    nixtheplanet.url = "github:matthewcroughan/NixThePlanet";
+    nixtheplanet.inputs.nixpkgs.follows = "nixpkgs";
 
     # Build, share, and run your local development environments with a single command. Without containers.
     # documentation: https://devenv.sh/getting-started/
@@ -157,12 +173,6 @@
     # Finds strings in a large list of cached NixOS store paths
     #grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
     #grep-nixos-cache.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Experimental nix expression to package all MacOS casks from homebrew automatically
-    #brew-nix.url = "github:BatteredBunny/brew-nix";
-    #brew-nix.inputs.nixpkgs.follows = "nixpkgs";
-    #brew-api.url = "github:BatteredBunny/brew-api";
-    #brew-api.flake = false;
   };
 
   ##################################################################################################
@@ -179,6 +189,7 @@
       nixos,
       nixos-hardware,
       darwin,
+      nix-homebrew,
       home-manager,
       devenv,
       ...
@@ -297,7 +308,7 @@
               inherit pkgs inputs;
             };
             modules = [
-              ./nixos/common/nix-nixpkgs-conf.nix
+              ./nixos/nix-nixpkgs-conf.nix
               ./nixos/bistroserve
               home-manager.nixosModules.home-manager
               {
@@ -335,8 +346,22 @@
                 ;
             };
             modules = [
-              ./darwin/mbrasch
+              ./darwin/trillian
               home-manager.darwinModules.home-manager
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  user = "mbrasch";
+                  enable = true;
+                  taps = {
+                    "homebrew/homebrew-core" = inputs.homebrew-core;
+                    "homebrew/homebrew-cask" = inputs.homebrew-cask;
+                    "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+                  };
+                  mutableTaps = false;
+                  autoMigrate = true;
+                };
+              }
               self.homeConfigurations.mbrasch-aarch64-darwin
               # {
               #   home-manager.useGlobalPkgs = true;
@@ -398,19 +423,19 @@
           pkgs = nixpkgsFor.${system};
         in
         {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
-            modules = [
-              (import ./devenv.nix {
-                inherit
-                  inputs
-                  pkgs
-                  self
-                  system
-                  ;
-              })
-            ];
-          };
+          # default = devenv.lib.mkShell {
+          #   inherit inputs pkgs;
+          #   modules = [
+          #     (import ./devenv.nix {
+          #       inherit
+          #         inputs
+          #         pkgs
+          #         self
+          #         system
+          #         ;
+          #     })
+          #   ];
+          # };
         }
       );
 
