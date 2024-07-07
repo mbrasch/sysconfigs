@@ -2,93 +2,121 @@
 
 [TOC]
 
-## introduction
+## Einstieg
 
-@TODO
+Nix ist ein großes Ökosystem, welches eine große Bandbreite abbildet:
+
+- Paketmanager:
+  - Nix alleine benutzt sich wie ein normaler imperativer Paketmanager, wie z.B. APT.
+  - Ermöglicht deklarative Development-Environments
+- Systemkonfiguration:
+  - NixOS: Konfigurationsmodule die aus Nix eine eigenständige voll-deklarative Linux-Distri machen.
+  - nix-darwin: Konfigurationsmodule, analog zu NixOS, deklarative Systemkonfiguration für macOS.
+  - system-manager: Konfigurationsmodule, analog zu NixOS, deklarative Systemkonfiguration für systemd-Linux-Distributionen
+- Nutzerkonfiguration:
+  - home-manager: Konfigurationsmodule, um alle Nutzer-Aspekte zu konfigurieren.
+
+Nix läuft auf macOS und den mmeisten Linux-Distributionen. Native Windows- und FreeBSD-Unterstützung ist in Arbeit. Nix sollte als Daemon installiert werden, kann aber auch ohne installiert werden. (Auf die Nachteile gehe ich hier nicht ein.) Die instzallierten Pakete landen in /nix/store.
+
+NixOS, nix-darwin und system-manager, als auch home-manager können separat betrieben. In diesem Fall updatet man System und Nutzer getrennt voneinander. Man kann allerdings auch home-manager in der jeweiligen Systemkonfiguration einhängen. Beide Varianten sind gleich gut. Die meisten Nix-User binden den home-manager in die System-Konfig ein.
 
 ---
 
-## install Nix
+## Nix installieren
 
-(for macOS and Linux)
+(macOS, Linux und Win/WSL)
 
-I use the [DetSys Nix installer](https://zero-to-nix.com/start/install) here. Firstly because it is easier to uninstall and secondly because the experimental features "nix-command" and "flakes" are active by default. Nix can of course also be installed from the [original installer](https://nixos.org/download/). (But then don't forget to activate the two experimental features).
+Ich verwende hier den [DetSys Nix Installer](https://zero-to-nix.com/start/install). Erstens, weil es einfacher zu deinstallieren ist und zweitens, weil die experimentellen Funktionen "nix-command" und "flakes" standardmäßig aktiv sind. Nix kann natürlich auch mit dem [original installer](https://nixos.org/download/) installiert werden. Dann müssen aber die beiden experimentellen Funktionen manuell aktiviert werden.
 
 ```shell
-# macOS only: install the xcode command line tools
+# Nur macOS: xcode command line tools installieren
 xcode-select --install
 
-# use alternative Nix installer with activated nix-command and flakes
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+# Installation via DetSys Installer, disable sending telemetry via --diagnostic-endpoint
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --diagnostic-endpoint=""
 
-# open new shell
+# Neue Shell öffnen
 exec $SHELL
 
-# optionally test Nix installation
+# Optional: Nix-Installation testen
 nix-shell -p nix-info --run "nix-info -m"
 ```
 
-### macOS: fix the problem with the missing Nix hook after system updates
+### macOS: Behebung des Problems mit dem fehlenden Nix-Hook nach System-Updates
 
-Unfortunately, macOS always overwrites the /etc/zshrc file during updates. This is a problem insofar as the hook for Nix is here (and has to be here). To circumvent this problem, you can use a launchd job to check on every system start whether this hook still exists and rewrite it if necessary:
+Leider überschreibt macOS bei Aktualisierungen immer die Datei /etc/zshrc. Das ist insofern ein Problem, als der Hook für Nix hier steht (und stehen muss). Um dieses Problem zu umgehen, kann man einen launchd-Job verwenden, der bei jedem Systemstart prüft, ob dieser Hook noch vorhanden ist und ihn ggf. neu schreibt:
 
-- copy the file [./darwin/org.nixos.darwin.check-zshrc-nix-hook.plist](./darwin/org.nixos.darwin.check-zshrc-nix-hook.plist) to `/Library/LaunchDaemons/`
-- set the correct user and access rights:
+- Kopiere die Datei [./darwin/org.nixos.darwin.check-zshrc-nix-hook.plist](./darwin/org.nixos.darwin.check-zshrc-nix-hook.plist) nach `/Library/LaunchDaemons/`
+- Setze den korrekten Nutzer und Zugriffsrechte:
   ```shell
   sudo chown root:wheel /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
   sudo chmod u=rw,go=r /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
   ```
 
-- load the launchd job:
+- Lade den launchd job:
   ```shell
   sudo launchctl load /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
   ```
 
-### regular use
+### Regulare Nutzung
 
 Using Nix only as a package manager is very like using imperative package manager like apt.
 
-**search for a package**
+**Paket suchen**
 
 ```shell
 nix search <search string>
 ```
 
-**install a package**
+**Paket installieren**
 
 ```shell
 nix profile install <package>
 ```
 
-**list installed packages**
+**Installierte Pakete auflisten**
 
 ```shell
 nix profile list
 ```
 
-**remove a package**
+**Paket deinstallieren**
 
 ```shell
 nix profile remove <package>
 ```
 
-**update packages**
+**Pakete updaten**
 
 ```shell
 nix profile update <package>
 ```
 
-### Uninstall
+**Alte Pakete aufräumen (alle)**
 
-If Nix was installed via the original installer, manual work is required. More on this in the [Nix manual](https://nix.dev/manual/nix/2.22/installation/uninstall). If the DetSys installer was used, it is easy:
+Aufgrund der Funktionsweise von Nix, bleiben alte Paketversionen nach einem Update erhalten (was Rollbacks erst ermöglicht). Der Nachteil ist allerdings, daß man von Zeit zu Zeit die älteren Pakete entfernen sollte. Über die Zeit können sonst einige GB zusammenkommen.
 
 ```shell
-# if you have installed the launchd job `check-zshrc-nix-hook.plist`
-# (from section `troubleshooting`):
+nix-collect-garbage -d
+```
+
+**Alte Pakete aufräumen (älter als n)**
+
+```shell
+# Beispiel für period: 14d (14 Tage)
+nix-collect-garbage --delete-older-than <period>
+```
+
+### Nix deinstallieren
+
+Wenn Nix über das ursprüngliche Installationsprogramm installiert wurde, ist manuelle Arbeit erforderlich. Mehr dazu im [Nix-Handbuch](https://nix.dev/manual/nix/2.22/installation/uninstall). Wenn das DetSys-Installationsprogramm verwendet wurde, ist es einfach:
+
+```shell
+# wenn der launchd job `check-zshrc-nix-hook.plist` installiert wurde:
 sudo launchctl bootout system/org.nixos.darwin.check-zshrc-nix-hook
 sudo rm /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 
-# if you have installed Nix via the alternative installer (mentioned in section `install`):
+# wenn der DetSys Installer benutzt wurde:
 /nix/nix-installer uninstall
 ```
 
@@ -96,23 +124,24 @@ sudo rm /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 
 ---
 
-## clone this repo
+## Dieses Repo klonen
 
-(for macOS, Linux and NixOS)
+(macOS, Linux, NixOS, Windows/WSL)
 
-### clone this repo
+### Repo klonen
 
-the destination directory depends on the specific case. @TODO
+das Zielverzeichnis hängt vom jeweiligen Fall ab. `@TODO`
 
-- for home-manager stand-alone: `~/.config/home-manager`
-- for nix-darwin (incl. home-manager): `@TODO`
-- for NixOS (incl. home-manager): `/etc/nixos`
+- für home-manager (stand-alone): `~/.config/home-manager`
+- für nix-darwin (incl. home-manager): `@TODO`
+- für system-manager (incl. home-manager): `@TODO`
+- für NixOS (incl. home-manager): `/etc/nixos`
 
 ```shell
 git clone git@github.com:mbrasch/sysconfigs.git <destination>
 ```
 
-### customize configuration
+### Konfiguration anpassen
 
  :warning: you need to adjust some values in `./flake.nix`:
 
@@ -123,11 +152,11 @@ git clone git@github.com:mbrasch/sysconfigs.git <destination>
 
 ---
 
-## home-manager stand-alone
+## home-manager (stand-alone)
 
-(for macOS, Linux, NixOS)
+(macOS, Linux, NixOS, Windows/WSL)
 
-### bootstrap
+### Installation
 
 ```shell
 # build configuration
@@ -137,33 +166,33 @@ nix build .#homeConfigurations.<username>.activationPackage
 ./result/activate
 ```
 
-### regular use
+### Regulare Nutzung
 
-**update flake**
+**Flake updaten**
 
 ```shell
 nix flake update github:mbrasch/sysconfigs#mbrasch
 ```
 
-**rebuild config**
+**Konfiguration neu bauen**
 
 ```shell
 home-manager switch
 ```
 
-**list all packages installed in `home-manager-path`**
+**Alle Pakete auflisten, die in `home-manager-path` installiert sind**
 
 ```shell
 home-manager packages
 ```
 
-**list all home manager generations**
+**Alle home-manager Generationen auflisten**
 
 ```shell
 home-manager generations
 ```
 
-**rollback to a previous generation**
+**Zu einer vorherigen Generation wechseln**
 
 ```shell
 # list generations
@@ -173,20 +202,20 @@ home-manager generations
 /nix/store/<some-hash>/activate
 ```
 
-**remove generations by IDs**
+**Generationen via IDs entfernen**
 
 ```shell
 # get the IDs via generations subcommand
 home-manager remove-generations <id 1> <id 2> …
 ```
 
-**remove generations older than n days or before a specific date**
+**Generations älter als n Tage oder vor einem spezifischen Tag entfernen**
 
 ```shell
 home-manager expire-generations [ -n days | yyyy-mm-dd ]
 ```
 
-### uninstall home manager
+### home-manager deinstallieren
 
 remove home manager from the user environment. this will
 
@@ -202,11 +231,11 @@ home-manager uninstall
 
 ---
 
-## nix-darwin (optionally with home-manager)
+## nix-darwin (optional mit home-manager)
 
-(for macOS only)
+(macOS)
 
-### bootstrap
+### Installation
 
 ```shell
 # build the base configuration
@@ -227,7 +256,7 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 exec $SHELL
 ```
 
-### regular use
+### Regulare Nutzung
 
 **apply configuration changes**
 
@@ -240,6 +269,8 @@ darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
 ---
 
 ## NixOS
+
+(NixOS)
 
 ### bootstrap
 
@@ -255,3 +286,10 @@ darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
 nixos-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
 ```
 
+
+
+---
+
+## system-manager (optional mit home-manager)
+
+(Linux, Windows/WSL)

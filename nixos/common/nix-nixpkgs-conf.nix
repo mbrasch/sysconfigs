@@ -14,8 +14,10 @@
       auto-optimise-store = false;
       builders-use-substitutes = true;
 
+      http-connections = 128; # default is 25
       connect-timeout = 30;
       download-attempts = 5;
+      max-substitution-jobs = 128; # default is 16
 
       extra-nix-path = "nixpkgs=flake:nixpkgs";
       system-features = [

@@ -20,14 +20,23 @@
   ##      nix.settings.trusted-users = [ "mike" ];
 
   nixConfig = {
-    bash-prompt = "\[sysconfigs\]$ ";
-    # experimental-features = [  ];    
+    #bash-prompt = "\[sysconfigs\]$ ";
+    #experimental-features = [  ];
+
     #buildMachines = [
     #  "ssh://root@nixos.local aarch64-linux,x86_64-linux"
     #];
-    #builders-use-substitutes = true;
-    extra-trusted-substituters = [ "https://nix-community.cachix.org" ];
-    extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
+    
+    builders-use-substitutes = true;
+    # append "?priority=n" to the end of the URL to set the priority of the substituter (highest priority is 0)
+    extra-trusted-substituters = [
+      "https://devenv.cachix.org?priority=1"
+      "https://nix-community.cachix.org?priority=2"
+    ];
+    extra-trusted-public-keys = [
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   ##################################################################################################
@@ -314,7 +323,8 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.mbrasch = import ./home/mbrasch;
+                home-manager.users.mike = import ./home/mike;
+                #home-manager.extraSpecialArgs = { };
               }
             ];
           };
@@ -328,7 +338,7 @@
       ##   @TODO
       ##
       ## usage:
-      ##   darwin-rebuild switch --flake .#mbrasch
+      ##   darwin-rebuild switch --flake .#mike
 
       darwinConfigurations = forAllDarwinSystems (
         system:
@@ -351,7 +361,7 @@
               nix-homebrew.darwinModules.nix-homebrew
               {
                 nix-homebrew = {
-                  user = "mbrasch";
+                  user = "mike";
                   enable = true;
                   taps = {
                     "homebrew/homebrew-core" = inputs.homebrew-core;
@@ -362,11 +372,11 @@
                   autoMigrate = true;
                 };
               }
-              self.homeConfigurations.mbrasch-aarch64-darwin
+              self.homeConfigurations.mike-aarch64-darwin
               # {
               #   home-manager.useGlobalPkgs = true;
               #   home-manager.useUserPackages = true;
-              #   home-manager.users.mbrasch = import ./home/mbrasch;
+              #   home-manager.users.mbrasch = import ./home/mike;
               #   #home-manager.users.admin = import ./home/admin;
               # }
             ];
@@ -400,15 +410,7 @@
             };
         in
         {
-          mbrasch-aarch64-darwin = mkHomeConfig "aarch64-darwin" "mbrasch";
-          mbrasch-x64_64-darwin = mkHomeConfig "x86_64-darwin" "mbrasch";
-          mbrasch-aarch64-linux = mkHomeConfig "aarch64-linux" "mbrasch";
-          mbrasch-x64_64-linux = mkHomeConfig "x86_64-linux" "mbrasch";
-
-          admin-aarch64-darwin = mkHomeConfig "aarch64-darwin" "admin";
-          admin-x64_64-darwin = mkHomeConfig "x86_64-darwin" "admin";
-          admin-aarch64-linux = mkHomeConfig "aarch64-linux" "admin";
-          admin-x64_64-linux = mkHomeConfig "x86_64-linux" "admin";
+          mike-trillian = mkHomeConfig "aarch64-darwin" "mike";
         };
 
       ##############################################################################################
