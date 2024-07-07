@@ -243,7 +243,8 @@ home-manager uninstall
 
 ```shell
 # build the base configuration
-nix build github:mbrasch/sysconfigs#darwinConfigurations.bootstrap.system
+#nix run nix-darwin -- switch --flake ".#trillian"
+nix build github:mbrasch/sysconfigs#darwinConfigurations.trillian.system
 
 # delete this, otherwise darwin-rebuild will fail to create a symlink
 # to the generated nix config
@@ -254,7 +255,7 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
 
 # finally run apply the bootstrap configuration
-./result/sw/bin/darwin-rebuild switch --flake .#bootstrap
+./result/sw/bin/darwin-rebuild switch --flake .#trillian
 
 # open new shell
 exec $SHELL

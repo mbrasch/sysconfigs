@@ -31,8 +31,8 @@
     iterm2 = {
       enable = true;
       recursive = true;
-      source = ./dotfiles/.iterm2;
-      target = "./zsh/.iterm2";
+      source = ./dotfiles/iterm2;
+      target = "./zsh/iterm2";
     };
   };
 }

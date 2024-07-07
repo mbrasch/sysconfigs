@@ -358,11 +358,11 @@
             modules = [
               ./darwin/trillian
               home-manager.darwinModules.home-manager
-              nix-homebrew.darwinModules.nix-homebrew
+              #nix-homebrew.darwinModules.nix-homebrew
               {
                 nix-homebrew = {
                   user = "mike";
-                  enable = true;
+                  enable = false;
                   taps = {
                     "homebrew/homebrew-core" = inputs.homebrew-core;
                     "homebrew/homebrew-cask" = inputs.homebrew-cask;
@@ -372,7 +372,7 @@
                   autoMigrate = true;
                 };
               }
-              self.homeConfigurations.mike-aarch64-darwin
+              self.homeConfigurations.mike-trillian
               # {
               #   home-manager.useGlobalPkgs = true;
               #   home-manager.useUserPackages = true;

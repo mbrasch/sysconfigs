@@ -63,9 +63,11 @@
       # zsh support for the nix run and nix-shell environments of the Nix package manager.
       ${pkgs.any-nix-shell}/bin/any-nix-shell zsh --info-right | source /dev/stdin
 
-      eval "$(/opt/homebrew/bin/brew shellenv)"
+      # export environment variables needed for brew to work
+      test -e /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-      test -e ${config.xdg.configHome}/zsh/.iterm2_shell_integration.zsh && source ${config.xdg.configHome}/zsh/.iterm2_shell_integration.zsh || true
+      # Shell-Integration für iTerm2: https://iterm2.com/documentation-shell-integration.html
+      test -e ${config.xdg.configHome}/zsh/iterm2_shell_integration.zsh && source ${config.xdg.configHome}/zsh/iterm2_shell_integration.zsh || true
     '';
 
     prezto = {
