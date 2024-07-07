@@ -177,7 +177,11 @@ nix flake update github:mbrasch/sysconfigs#mbrasch
 **Konfiguration neu bauen**
 
 ```shell
+# wenn die Config in ~/.config/home-manager liegt
 home-manager switch
+
+# wenn die Config in einem beliebigen anderen Ordner liegt
+home-manager switch [--flake .#<config>]
 ```
 
 **Alle Pakete auflisten, die in `home-manager-path` installiert sind**

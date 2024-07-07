@@ -26,6 +26,7 @@ in
     ../common/zsh.nix
     ../common/shell-tools.nix
     #../common/nix-nixpkgs-conf.nix
+    ../common/dotfiles.nix
 
     # If you want to use modules your own flake exports (from modules/home-manager):
     #outputs.homeManagerModules.example

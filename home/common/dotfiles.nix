@@ -24,8 +24,8 @@
 
     iterm2_shell_integration = {
       enable = true;
-      source = ./dotfiles/.iterm2_shell_integration.zsh;
-      target = "./zsh/.iterm2_shell_integration.zsh";
+      source = ./dotfiles/iterm2_shell_integration.zsh;
+      target = "./zsh/iterm2_shell_integration.zsh";
     };
 
     iterm2 = {
