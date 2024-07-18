@@ -1,7 +1,7 @@
 # nix-darwin configuration for the machine "mbrasch"
 {
   self,
-  system,
+  #system,
   pkgs,
   inputs,
   ...
@@ -22,7 +22,7 @@
   nix.settings.experimental-features = "nix-command flakes";
 
   # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = system;
+  #nixpkgs.hostPlatform = system;
 
   # includes overlays to default packages
   nixpkgs.overlays = [

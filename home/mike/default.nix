@@ -27,6 +27,7 @@ in
     ../common/shell-tools.nix
     #../common/nix-nixpkgs-conf.nix
     ../common/dotfiles.nix
+    #../common/ssh.nix
 
     # If you want to use modules your own flake exports (from modules/home-manager):
     #outputs.homeManagerModules.example
@@ -171,6 +172,7 @@ in
 
       ollama
       aichat
+      tailscale
 
       #------------------------------------------
       # https://libimobiledevice.org
@@ -253,24 +255,6 @@ in
       enable = true;
       #path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
       path = pkgs.lib.mkForce "/Volumes/Shared/Repositories/Privat/sysconfigs";
-    };
-
-    git = {
-      enable = false;
-    };
-
-    ssh = {
-      enable = false;
-      matchBlocks = {
-        "john.example.com" = {
-          hostname = "example.com";
-          user = "john";
-        };
-        # foo = lib.hm.dag.entryBefore ["john.example.com"] {
-        #   hostname = "example.com";
-        #   identityFile = "/home/john/.ssh/foo_rsa";
-        # };
-      };
     };
 
     vscode = {

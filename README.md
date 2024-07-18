@@ -1,5 +1,9 @@
 # sysconfigs
 
+noch nicht fertig
+
+---
+
 [TOC]
 
 ## Einstieg
@@ -243,8 +247,7 @@ home-manager uninstall
 
 ```shell
 # build the base configuration
-#nix run nix-darwin -- switch --flake ".#trillian"
-nix build github:mbrasch/sysconfigs#darwinConfigurations.trillian.system
+nix run nix-darwin -- switch --flake ".#trillian"
 
 # delete this, otherwise darwin-rebuild will fail to create a symlink
 # to the generated nix config

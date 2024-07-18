@@ -26,7 +26,7 @@
     #buildMachines = [
     #  "ssh://root@nixos.local aarch64-linux,x86_64-linux"
     #];
-    
+
     builders-use-substitutes = true;
     # append "?priority=n" to the end of the URL to set the priority of the substituter (highest priority is 0)
     extra-trusted-substituters = [
@@ -48,18 +48,24 @@
   ## use "git+file:///to/project/path" for local references (only during development of this flake)
 
   inputs = {
-    # Nix Packages collection & NixOS 
+    # Nix Packages collection & NixOS
     # documentation:  https://nixos.org/manual/nixpkgs/stable/
     #                 https://nixos.org/manual/nix/stable/
     # package search: https://search.nixos.org/packages
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     #nixpkgs.url = "github:mbrasch/nixpkgs";
 
-    # Nix Packages collection & NixOS 
+    # Nix Packages collection & NixOS
     # documentation:  https://nixos.org/manual/nixos/stable/
     # options search: https://search.nixos.org/options
     nixos.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an
+    #      opinionated file structure.
+    # documentation: https://snowfall.org/guides/lib/quickstart/
+    snowfall-lib.url = "github:snowfallorg/lib";
+    snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
 
     # nix modules for darwin (the equivalent of NixOS modules for macOS)
     # documentation: https://daiderd.com/nix-darwin
@@ -278,7 +284,7 @@
 
       #nixcasks = inputs.nixcasks.legacyPackages.aarch64-darwin;
 
-      #nixcasks = forAllSystems ( system: let 
+      #nixcasks = forAllSystems ( system: let
       #  pkgs = nixpkgsFor.${system};
       #in {
       #  inputs.nixcasks.legacyPackages;
@@ -338,56 +344,50 @@
       ##   @TODO
       ##
       ## usage:
-      ##   darwin-rebuild switch --flake .#mike
+      ##   darwin-rebuild switch --flake .#<name>
 
-      darwinConfigurations = forAllDarwinSystems (
-        system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
-          trillian = darwin.lib.darwinSystem {
-            specialArgs = {
-              inherit
-                self
-                system
-                pkgs
-                inputs
-                ;
-            };
-            modules = [
-              ./darwin/trillian
-              home-manager.darwinModules.home-manager
-              #nix-homebrew.darwinModules.nix-homebrew
-              {
-                nix-homebrew = {
-                  user = "mike";
-                  enable = false;
-                  taps = {
-                    "homebrew/homebrew-core" = inputs.homebrew-core;
-                    "homebrew/homebrew-cask" = inputs.homebrew-cask;
-                    "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-                  };
-                  mutableTaps = false;
-                  autoMigrate = true;
-                };
-              }
-              self.homeConfigurations.mike-trillian
-              # {
-              #   home-manager.useGlobalPkgs = true;
-              #   home-manager.useUserPackages = true;
-              #   home-manager.users.mbrasch = import ./home/mike;
-              #   #home-manager.users.admin = import ./home/admin;
-              # }
-            ];
+      darwinConfigurations = {
+        trillian = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = {
+            inherit self inputs;
           };
-        }
-      );
+          modules = [
+            ./darwin/trillian
+            home-manager.darwinModules.home-manager
+            #self.homeConfigurations.mike-trillian
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.mike = import ./home/mike;
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+                username = "mike";
+              };
+            }
+
+            #nix-homebrew.darwinModules.nix-homebrew
+            #{
+            #  nix-homebrew = {
+            #    user = "mike";
+            #    enable = true;
+            #    taps = {
+            #      "homebrew/homebrew-core" = inputs.homebrew-core;
+            #      "homebrew/homebrew-cask" = inputs.homebrew-cask;
+            #      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+            #    };
+            #    mutableTaps = false;
+            #    autoMigrate = true;
+            #  };
+            #}
+          ];
+        };
+      };
 
       ##############################################################################################
       ## homeConfigurations
       ##
-      ## stand-alone (darwin, NixOS and normal linux distributions)
+      ## stand-alone (macOS, NixOS and normal linux distributions)
       ##   IMPORTANT: only use each home configuration when logged in to the respective user account
       ##
       ## initial installation:
@@ -446,7 +446,7 @@
       ##
       ## nix check [.#default]
 
-      # checks =  forAllNixSystems ( system: let 
+      # checks =  forAllNixSystems ( system: let
       #   pkgs = nixpkgsFor.${system};
       # in {
       #   default = {};

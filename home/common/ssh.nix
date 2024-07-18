@@ -6,29 +6,29 @@
 }:
 
 {
-  home.programs.ssh = {
+  programs.ssh = {
     enable = true;
-    controlMaster = "auto";
-    #controlPath = "${tmp_directory}/ssh-%u-%r@%h:%p";
-    controlPersist = "1800";
-    forwardAgent = true;
-    serverAliveInterval = 60;
-    hashKnownHosts = true;
+    includes = [
+      #"~/.ssh/config.private"
+    ];
+    AddKeysToAgent = "confirm";
 
-    #extraConfig = ''
-    #  #SCE_GROUP:B0713CB6-A009-4E72-AC09-A9DE823B9F60:::Privat
-    #  Host BistroServe
-    #  User admin
-    #  HostName bistroserve
-    #  IdentityFile ~/.ssh/private.id.rsa
-    #  #SCEIcon home
-    #  #SCEGroup B0713CB6-A009-4E72-AC09-A9DE823B9F60
-    #  #SCE_GROUP:D34811CE-4F87-4B7F-AFAE-826B9310D5AF:::Serviceware
-    #  Host bc-climgmt3.pmcs.de
-    #  User mbrasch
-    #  IdentityFile ~/.ssh/serviceware.id.rsa
-    #  #SCEIcon suitcase
-    #  #SCEGroup D34811CE-4F87-4B7F-AFAE-826B9310D5AF
-    #'';
+    matchBlocks = {
+      # "*" = {
+      #   hostname = "*";
+      #   identityFile = "IdentityAgent ~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock";
+      #   IdentitiesOnly = true;
+      # };
+    };
+
+    extraConfig = ''
+      Host *
+      IdentityAgent ~/Library/Group\ Containers/group.strongbox.mac.mcguill/agent.sock
+      IdentitiesOnly yes
+    '';
   };
+
+  # this option is only available for linux
+  services.ssh-agent = lib.mkIf pkgs.stdenv.hostPlatform.isLinux { enable = true; };
+
 }
