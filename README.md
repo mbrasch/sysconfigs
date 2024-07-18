@@ -1,6 +1,8 @@
 # sysconfigs
 
-noch nicht fertig
+Noch nicht fertig. Bereits funktionierend:
+
+- home-manager: trillian
 
 ---
 
