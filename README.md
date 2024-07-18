@@ -1,6 +1,6 @@
 # sysconfigs
 
-Noch nicht fertig. Bereits funktionierend:
+Ich baue gerade alles um. Bereits (wieder) funktionierend:
 
 - home-manager: trillian
 
