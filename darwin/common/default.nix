@@ -7,7 +7,7 @@
 
 {
   imports = [
-    ./nix-conf.nix
-    ./nixpkgs-conf.nix
+  ./nix-conf.nix
+  ./nixpkgs-conf.nix
   ];
 }

@@ -8,7 +8,7 @@
 {
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
-    ./syncthing.nix
+    #./syncthing.nix
     #(builtins.fromTOML (builtins.readFile ./myconfig.toml))
   ];
 
@@ -264,6 +264,31 @@
     };
   };
 
+  # better use nix-flatpak per-user via home-manager -> see documentation
+  # services.flatpak = {
+  #   enable = true;
+  #   uninstallUnmanaged = true;
+  #   update = {
+  #     onActivation = true;
+  #     auto = {
+  #       enable = true;
+  #       onCalendar = "weekly";
+  #     };
+
+  #     services.flatpak.remotes = lib.mkOptionDefault [{
+  #       name = "flathub-beta";
+  #       location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
+  #     }];
+
+  #     packages = [
+  #       { appId = "com.brave.Browser"; origin = "flathub";  }
+  #       "com.obsproject.Studio"
+  #       "im.riot.Riot"
+  #     ];
+
+  #     overrides = {}; # see documentation
+  #   };
+
   # ------------------------------------------------------------------------------------------------
 
   systemd.services.irc = {
@@ -393,5 +418,13 @@
         echo "	vpn-status = systemctl status openvpn-vpn-hh.service"
       '';
     };
+
+    nh = {
+      enable = false;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 2";
+      #flake = "/home/user/my-nixos-config";
+    };
+
   };
 }

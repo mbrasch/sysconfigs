@@ -105,7 +105,7 @@ in
       #------------------------------------------
       # fonts
 
-      # we don't need all nerdfonts, so we overwrite the list of fonts to install 
+      # we don't need all nerdfonts, so we overwrite the list of fonts to install
       (nerdfonts.override {
         fonts = [
           "Noto"
@@ -118,10 +118,13 @@ in
 
       #------------------------------------------
       # nix tools
-
-      inputs.nix-search.packages.${system}.nix-search # CLI for searching packages on search.nixos.org
+      #
+      # to find the exact package name from a flake, you can look into the corresponding flake
+      #     -> output.packages.${system}.<name>
+      inputs.nix-search.packages.${system}.nix-search
       #inputs.grep-nixos-cache.defaultPackage.${system}
       #inputs.nix-fast-build.packages.${pkgs.system}.nix-fast-build
+      inputs.nix2sbom.packages.${system}.default
 
       cachix # command line client for Nix binary cache hosting https://cachix.org
       nix-diff # explain why two Nix derivations differ
@@ -140,16 +143,23 @@ in
       #------------------------------------------
       # shell tools
 
+      # modernized commands
+
+      procs # modern ps
+      eza # modern ls
       dua # modern du
       duf # modern df
       gping # ping with graph
       ripgrep # modern grep
+      tokei # modern wc for code
+
+      # the rest
+
       mtr-gui # tracerout + ping
-      #ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
+      ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
       fastfetch # like neofetch, but much faster because written in C
       #macchina # like neofetch, but much faster because written in Rust
       #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
-      tokei # modern wc for code
       tree # list directories in a tree
       wakeonlan
       # wimlib # extract, create, and modify WIM files : build error
@@ -161,18 +171,28 @@ in
       libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
       android-tools
       asitop # Perf monitoring CLI tool for Apple Silicon
+      thefuck
+      f3 # Fight Flash Fraud
+      tmux
 
       git
       lazygit # simple terminal UI for git commands
       git-absorb # git commit --fixup, but automatic
-      thefuck
 
       inxi
       #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
 
-      ollama
-      aichat
+      #ollama
+      #aichat
       tailscale
+      sshs
+
+      #------------------------------------------
+      # linux-only tools
+
+      #(pkgs.lib.optionals pkgs.stdenv.isLinux iproute2) # error: A definition for option `home.packages."[definition 1-entry 43]"' is not of type `package'.
+      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux iproute2) # rtstat rdma ss rtacct arpd routel ip ctstat vdpa nstat ifstat dcb tc devlink rtmon lnstat tipc bridge genl
+      #(lib.mkIf pkgs.stdenv.hostPlatform.isNixos nix-ld) # Run unpatched dynamic binaries on NixOS
 
       #------------------------------------------
       # https://libimobiledevice.org
@@ -192,7 +212,6 @@ in
       # languages
 
       nodejs
-      mermaid-cli
 
       (python3.withPackages (p: [
         p.black
@@ -208,7 +227,11 @@ in
       #python311Packages.python-lsp-black
       #python311Packages.python-lsp-server
 
-      clang-tools_18
+      php
+
+      clang_19
+      clang-tools
+      clang-manpages
 
       rustc # rust compiler
       rustfmt # rust code formatter
@@ -228,9 +251,12 @@ in
 
       vimPlugins.copilot-vim # for "Copilot for Xcode"
 
+      mermaid-cli # generate diagrams and flowcharts from text in a similar manner as markdown
+
       #------------------------------------------
       # gui apps
 
+      sniffnet
       #diffuse # diff tool
       #meld # diff tool (on macos: start via shell)
       #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration

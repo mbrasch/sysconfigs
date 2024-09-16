@@ -1,4 +1,3 @@
-# nix-darwin configuration for the machine "mbrasch"
 {
   self,
   #system,
@@ -7,9 +6,10 @@
   ...
 }@args:
 {
-
-  # includes sub-configurations
-  imports = [ ../common/nix-nixpkgs-conf.nix ];
+  imports = [
+    ../common/nix-conf.nix
+    ../common/nixpkgs-conf.nix
+  ];
 
   ##################################################################################################
   ## minimal required config for nix-darwin

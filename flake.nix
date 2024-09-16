@@ -7,15 +7,15 @@
   ##################################################################################################
   ## nixConfig
   ##
-  ## here you can configure nix specific to this project. you may (and probably will) asked for
-  ## your permissions for security relevant settings.
+  ## here you can configure nix options specific to this project. you may (and probably will) be
+  ## asked for your permissions for security relevant settings.
   ##
   ## For the extra-substituters, you need add your username to the trusted list
-  ##   in /etc/nix/nix.conf. Edit this file direct
+  ## in /etc/nix/nix.conf. Edit this file direct
   ##
   ##      trusted-users = mike
   ##
-  ##   or via nix configuration)
+  ## or via nix configuration)
   ##
   ##      nix.settings.trusted-users = [ "mike" ];
 
@@ -48,21 +48,21 @@
   ## use "git+file:///to/project/path" for local references (only during development of this flake)
 
   inputs = {
-    # Nix Packages collection & NixOS
+    # Nix Packages collection
     # documentation:  https://nixos.org/manual/nixpkgs/stable/
     #                 https://nixos.org/manual/nix/stable/
     # package search: https://search.nixos.org/packages
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     #nixpkgs.url = "github:mbrasch/nixpkgs";
 
-    # Nix Packages collection & NixOS
+    # NixOS
     # documentation:  https://nixos.org/manual/nixos/stable/
     # options search: https://search.nixos.org/options
     nixos.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an
-    #      opinionated file structure.
+    # opinionated file structure.
     # documentation: https://snowfall.org/guides/lib/quickstart/
     snowfall-lib.url = "github:snowfallorg/lib";
     snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
@@ -188,6 +188,15 @@
     # Finds strings in a large list of cached NixOS store paths
     #grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
     #grep-nixos-cache.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Install flatpaks declaratively
+    # documentation: https://github.com/gmodena/nix-flatpak
+    #nix-flatpak.url = "github:gmodena/nix-flatpak";
+
+    # nix2sbom extracts the SBOM (Software Bill of Materials) from a Nix derivation
+    # documentation: https://github.com/louib/nix2sbom/wiki/
+    nix2sbom.url = "github:louib/nix2sbom";
+    nix2sbom.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   ##################################################################################################
@@ -206,7 +215,7 @@
       darwin,
       nix-homebrew,
       home-manager,
-      devenv,
+      #nix-flatpak,
       ...
     }@inputs:
     let
@@ -272,8 +281,7 @@
         in
         {
           hello = pkgs.hello;
-          hm-activation = homeConfigurations.mbrasch-aarch64-darwin.activationPackage;
-          #"x86_64-linux".default = homeConfigurations."work".activationPackage;
+          hm-activation = homeConfigurations.mbrasch-trillian.activationPackage;
         }
       );
 
@@ -305,7 +313,6 @@
           pkgs = nixpkgsFor.${system};
         in
         {
-
           installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
             inherit system;
             modules = [ ./nixos/custom-iso.nix ];
@@ -326,6 +333,7 @@
               ./nixos/nix-nixpkgs-conf.nix
               ./nixos/bistroserve
               home-manager.nixosModules.home-manager
+              #nix-flatpak.nixosModules.nix-flatpak
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
@@ -346,43 +354,49 @@
       ## usage:
       ##   darwin-rebuild switch --flake .#<name>
 
-      darwinConfigurations = {
-        trillian = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = {
-            inherit self inputs;
-          };
-          modules = [
-            ./darwin/trillian
-            home-manager.darwinModules.home-manager
-            #self.homeConfigurations.mike-trillian
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.mike = import ./home/mike;
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                username = "mike";
-              };
-            }
+      darwinConfigurations = forAllDarwinSystems (
+        system:
+        let
+          pkgs = nixpkgsFor.${system};
+        in
+        {
+          trillian = darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            specialArgs = {
+              inherit self inputs;
+            };
+            modules = [
+              ./darwin/trillian
+              home-manager.darwinModules.home-manager
+              #self.homeConfigurations.mike-trillian
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.mike = import ./home/mike;
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                  username = "mike";
+                };
+              }
 
-            #nix-homebrew.darwinModules.nix-homebrew
-            #{
-            #  nix-homebrew = {
-            #    user = "mike";
-            #    enable = true;
-            #    taps = {
-            #      "homebrew/homebrew-core" = inputs.homebrew-core;
-            #      "homebrew/homebrew-cask" = inputs.homebrew-cask;
-            #      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-            #    };
-            #    mutableTaps = false;
-            #    autoMigrate = true;
-            #  };
-            #}
-          ];
-        };
-      };
+              #nix-homebrew.darwinModules.nix-homebrew
+              #{
+              #  nix-homebrew = {
+              #    user = "mike";
+              #    enable = true;
+              #    taps = {
+              #      "homebrew/homebrew-core" = inputs.homebrew-core;
+              #      "homebrew/homebrew-cask" = inputs.homebrew-cask;
+              #      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+              #    };
+              #    mutableTaps = false;
+              #    autoMigrate = true;
+              #  };
+              #}
+            ];
+          };
+        }
+      );
 
       ##############################################################################################
       ## homeConfigurations
