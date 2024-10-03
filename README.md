@@ -10,7 +10,7 @@ Ich baue gerade alles um. Bereits (wieder) funktionierend:
 
 ## Einstieg
 
-Nix ist ein großes Ökosystem, welches eine große Bandbreite abbildet:
+Nix ist ein großes Ökosystem, das eine große Bandbreite abbildet:
 
 - Paketmanager:
   - Nix alleine benutzt sich wie ein normaler imperativer Paketmanager, wie z.B. APT.
@@ -266,12 +266,21 @@ echo 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf
 exec $SHELL
 ```
 
+
+
+```shell
+nix build ".#darwinConfigurations.aarch64-darwin.trillian.system"
+sudo ./result/activate-user
+```
+
+
+
 ### Regulare Nutzung
 
 **apply configuration changes**
 
 ```shell
-darwin-rebuild switch --flake github:mbrasch/sysconfigs#mbrasch
+darwin-rebuild switch --flake github:mbrasch/sysconfigs#trillian
 ```
 
 

@@ -11,7 +11,7 @@
             type = "partition";
             name = "ESP";
             start = "0";
-            end = "1GiB";
+            end = "2GiB";
             fs-type = "fat32";
             bootable = true;
             content = {
@@ -23,7 +23,7 @@
           {
             type = "partition";
             name = "root";
-            start = "1GiB";
+            start = "2GiB";
             end = "100%";
             content = {
               type = "zfs";

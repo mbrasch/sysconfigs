@@ -35,7 +35,8 @@ in
     # Or modules exported from other flakes:
     #inputs.nix-colors.homeManagerModules.default
     #inputs.xhmm.homeManagerModules.console.all
-    #inputs.stylix.homeManagerModules.stylix
+    ( if pkgs.stdenv.hostPlatform.isLinux then inputs.stylix.homeManagerModules.stylix else {} )
+    ( if pkgs.stdenv.hostPlatform.isLinux then ../common/stylix.nix else {} )
   ];
 
   #nixpkgs = {
@@ -69,7 +70,7 @@ in
 
   home = {
     username = username;
-    homeDirectory = homeDirectory;
+    homeDirectory = lib.mkDefault homeDirectory;
     stateVersion = "23.05";
 
     enableDebugInfo = false;

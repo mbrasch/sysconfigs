@@ -20,7 +20,7 @@
   ##  - If the module provides a package option, such as programs.beets.package, then this is the
   ##    recommended way to perform the override. For example:
   ##
-  ##      programs.XXX.package = pkgs.XXX.override { XXX = true; };
+  ##      programs.XXX.package = pkgs.XXX.override { YYY = true; };
   ##
   ##    To see the options you can override, you need to look into the nixpkgs package definition.
   ##    hint: to find a package in the nixpkgs hierarchy easier, search for it in the file

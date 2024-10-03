@@ -425,6 +425,8 @@
         in
         {
           mike-trillian = mkHomeConfig "aarch64-darwin" "mike";
+          mike-tuxedo = mkHomeConfig "x86_64-linux" "mike";
+          mike-aarch64-linux = mkHomeConfig "aarch64-linux" "mike";
         };
 
       ##############################################################################################
