@@ -35,8 +35,8 @@ in
     # Or modules exported from other flakes:
     #inputs.nix-colors.homeManagerModules.default
     #inputs.xhmm.homeManagerModules.console.all
-    ( if pkgs.stdenv.hostPlatform.isLinux then inputs.stylix.homeManagerModules.stylix else {} )
-    ( if pkgs.stdenv.hostPlatform.isLinux then ../common/stylix.nix else {} )
+    #( if pkgs.stdenv.hostPlatform.isLinux then inputs.stylix.homeManagerModules.stylix else {} )
+    #( if pkgs.stdenv.hostPlatform.isLinux then ../common/stylix.nix else {} )
   ];
 
   #nixpkgs = {
@@ -57,13 +57,6 @@ in
   };
 
   news.display = "silent";
-
-  ##################################################################################################
-  ## nixpkgs
-
-  # nixpkgs = {
-  #   overlays = [ inputs.brew-nix.overlay.${pkgs.builtins.currentSystem} ];
-  # };
 
   ##################################################################################################
   ## user home configuration
@@ -228,7 +221,7 @@ in
       #python311Packages.python-lsp-black
       #python311Packages.python-lsp-server
 
-      php
+      # php # failed to build php-soap-8.2.24
 
       clang_19
       clang-tools

@@ -5,7 +5,26 @@
   description = "Various Nix configurations for Darwin and NixOS";
 
   ##################################################################################################
-  ## nixConfig
+  ##
+  ##                                          # ###                             /##                      
+  ##                 #                      /  /###  /                        #/ ###   #                 
+  ##                ###                    /  /  ###/                        ##   ### ###                
+  ##                 #                    /  ##   ##                         ##        #                 
+  ##                                     /  ###                              ##                          
+  ##   ###  /###   ###     /##    ###   ##   ##          /###   ###  /###    ######  ###       /###      
+  ##    ###/ #### / ###   / ###  #### / ##   ##         / ###  / ###/ #### / #####    ###     /  ###  /  
+  ##     ##   ###/   ##      ### /###/  ##   ##        /   ###/   ##   ###/  ##        ##    /    ###/   
+  ##     ##    ##    ##       ##/  ##   ##   ##       ##    ##    ##    ##   ##        ##   ##     ##    
+  ##     ##    ##    ##        /##      ##   ##       ##    ##    ##    ##   ##        ##   ##     ##    
+  ##     ##    ##    ##       / ###      ##  ##       ##    ##    ##    ##   ##        ##   ##     ##    
+  ##     ##    ##    ##      /   ###      ## #      / ##    ##    ##    ##   ##        ##   ##     ##    
+  ##     ##    ##    ##     /     ###      ###     /  ##    ##    ##    ##   ##        ##   ##     ##    
+  ##     ###   ###   ### / /       ### /    ######/    ######     ###   ###  ##        ### / ########    
+  ##      ###   ###   ##/ /         ##/       ###       ####       ###   ###  ##        ##/    ### ###   
+  ##                                                                                                ###  
+  ##                                                                                          ####   ### 
+  ##                                                                                        /######  /#  
+  ##                                                                                       /     ###/      
   ##
   ## here you can configure nix options specific to this project. you may (and probably will) be
   ## asked for your permissions for security relevant settings.
@@ -40,7 +59,25 @@
   };
 
   ##################################################################################################
-  ## inputs
+  ##
+  ##     #                                                          
+  ##    ###                                           #             
+  ##     #                                           ##             
+  ##                                                 ##             
+  ##   ###   ###  /###       /###   ##   ####      ######## /###    
+  ##    ###   ###/ #### /   / ###  / ##    ###  / ######## / #### / 
+  ##     ##    ##   ###/   /   ###/  ##     ###/     ##   ##  ###/  
+  ##     ##    ##    ##   ##    ##   ##      ##      ##  ####       
+  ##     ##    ##    ##   ##    ##   ##      ##      ##    ###      
+  ##     ##    ##    ##   ##    ##   ##      ##      ##      ###    
+  ##     ##    ##    ##   ##    ##   ##      ##      ##        ###  
+  ##     ##    ##    ##   ##    ##   ##      /#      ##   /###  ##  
+  ##     ### / ###   ###  #######     ######/ ##     ##  / #### /   
+  ##      ##/   ###   ### ######       #####   ##     ##    ###/    
+  ##                      ##                                        
+  ##                      ##                                        
+  ##                      ##                                        
+  ##                       ##                                       
   ##
   ## introspect   -> nix flake metadata
   ## update       -> nix flake update
@@ -61,17 +98,30 @@
     nixos.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an
-    # opinionated file structure.
-    # documentation: https://snowfall.org/guides/lib/quickstart/
-    snowfall-lib.url = "github:snowfallorg/lib";
-    snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
-
     # nix modules for darwin (the equivalent of NixOS modules for macOS)
     # documentation: https://daiderd.com/nix-darwin
     # options:       https://daiderd.com/nix-darwin/manual
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Manage system config using nix on any linux distro
+    # documentation: https://github.com/numtide/system-manager
+    system-manager.url = "github:nix-systems/default";
+
+    # Run graphics accelerated programs built with Nix on any Linux distribution.
+    # documentation: https://github.com/soupglasses/nix-system-graphics
+    nix-system-graphics.url = "github:soupglasses/nix-system-graphics";
+    nix-system-graphics.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Manage a user environment using Nix
+    # documentation:  https://nix-community.github.io/home-manager/
+    # options search: https://mipmip.github.io/home-manager-option-search
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Externally extensible flake systems
+    # documentation: https://github.com/nix-systems/nix-systems
+    systems.url = "github:nix-systems/default";
 
     # Homebrew installation manager for nix-darwin
     # documentation: https://github.com/zhaofengli/nix-homebrew
@@ -83,6 +133,16 @@
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
 
+    # Modular server management based on NixOS modules and focused on best practices
+    # documentation: https://shb.skarabox.com/
+    selfhostblocks.url = "github:ibizaman/selfhostblocks";
+
+    # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an
+    # opinionated file structure.
+    # documentation: https://snowfall.org/guides/lib/quickstart/
+    snowfall-lib.url = "github:snowfallorg/lib";
+    snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
+
     # Homebrew casks, nixified
     # documentation: https://github.com/jacekszymanski/nixcasks/
     #nixcasks.url = "github:jacekszymanski/nixcasks";
@@ -93,16 +153,6 @@
     #brew-nix.inputs.nixpkgs.follows = "nixpkgs";
     #brew-api.url = "github:BatteredBunny/brew-api";
     #brew-api.flake = false;
-
-    # Manage a user environment using Nix
-    # documentation:  https://nix-community.github.io/home-manager/
-    # options search: https://mipmip.github.io/home-manager-option-search
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Externally extensible flake systems
-    # documentation: https://github.com/nix-systems/nix-systems
-    systems.url = "github:nix-systems/default";
 
     # Run macOS, Windows and more via a single Nix command, or simple nixosModules
     # documentation: https://github.com/matthewcroughan/NixThePlanet
@@ -200,7 +250,24 @@
   };
 
   ##################################################################################################
-  ## outputs
+  ##
+  ##                               #                              #             
+  ##                              ##                             ##             
+  ##                              ##                             ##             
+  ##      /###   ##   ####      ######## /###   ##   ####      ######## /###    
+  ##     / ###  / ##    ###  / ######## / ###  / ##    ###  / ######## / #### / 
+  ##    /   ###/  ##     ###/     ##   /   ###/  ##     ###/     ##   ##  ###/  
+  ##   ##    ##   ##      ##      ##  ##    ##   ##      ##      ##  ####       
+  ##   ##    ##   ##      ##      ##  ##    ##   ##      ##      ##    ###      
+  ##   ##    ##   ##      ##      ##  ##    ##   ##      ##      ##      ###    
+  ##   ##    ##   ##      ##      ##  ##    ##   ##      ##      ##        ###  
+  ##   ##    ##   ##      /#      ##  ##    ##   ##      /#      ##   /###  ##  
+  ##    ######     ######/ ##     ##  #######     ######/ ##     ##  / #### /   
+  ##     ####       #####   ##     ## ######       #####   ##     ##    ###/    
+  ##                                  ##                                        
+  ##                                  ##                                        
+  ##                                  ##                                        
+  ##                                   ##                                       
   ##
   ## implicit attributes: outPath, rev, revCount, lastModifiedDate, lastModified, narHash
   ##
@@ -215,6 +282,8 @@
       darwin,
       nix-homebrew,
       home-manager,
+      system-manager,
+      nix-system-graphics,
       #nix-flatpak,
       ...
     }@inputs:
@@ -253,7 +322,13 @@
     rec {
 
       ##############################################################################################
-      ## apps
+      ##
+      ##    .d8b.  d8888b. d8888b. .d8888. 
+      ##   d8' `8b 88  `8D 88  `8D 88'  YP 
+      ##   88ooo88 88oodD' 88oodD' `8bo.   
+      ##   88~~~88 88~~~   88~~~     `Y8b. 
+      ##   88   88 88      88      db   8D 
+      ##   YP   YP 88      88      `8888Y' 
       ##
       ##   nix run .#<name> [-- <args>]
 
@@ -269,7 +344,13 @@
       };
 
       ##############################################################################################
-      ## packages
+      ##
+      ##   d8888b.  .d8b.   .o88b. db   dD  .d8b.   d888b  d88888b .d8888. 
+      ##   88  `8D d8' `8b d8P  Y8 88 ,8P' d8' `8b 88' Y8b 88'     88'  YP 
+      ##   88oodD' 88ooo88 8P      88,8P   88ooo88 88      88ooooo `8bo.   
+      ##   88~~~   88~~~88 8b      88`8b   88~~~88 88  ooo 88~~~~~   `Y8b. 
+      ##   88      88   88 Y8b  d8 88 `88. 88   88 88. ~8~ 88.     db   8D 
+      ##   88      YP   YP  `Y88P' YP   YD YP   YP  Y888P  Y88888P `8888Y' 
       ##
       ##   nix build .#<name>
       ##   nix run .#<name> [-- <args>]
@@ -281,12 +362,19 @@
         in
         {
           hello = pkgs.hello;
-          hm-activation = homeConfigurations.mbrasch-trillian.activationPackage;
+          #hm-activation = homeConfigurations.mbrasch-trillian.activationPackage;
         }
       );
 
       ##############################################################################################
-      ## nixcasks
+      ##
+      ##   d8b   db d888888b db    db  .o88b.  .d8b.  .d8888. db   dD .d8888. 
+      ##   888o  88   `88'   `8b  d8' d8P  Y8 d8' `8b 88'  YP 88 ,8P' 88'  YP 
+      ##   88V8o 88    88     `8bd8'  8P      88ooo88 `8bo.   88,8P   `8bo.   
+      ##   88 V8o88    88     .dPYb.  8b      88~~~88   `Y8b. 88`8b     `Y8b. 
+      ##   88  V888   .88.   .8P  Y8. Y8b  d8 88   88 db   8D 88 `88. db   8D 
+      ##   VP   V8P Y888888P YP    YP  `Y88P' YP   YP `8888Y' YP   YD `8888Y' 
+      ##
       ## in config use like:
       ##    with pkgs.nixcasks; [ mpv paintbrush tor-browser ]
 
@@ -299,7 +387,13 @@
       #});
 
       ##############################################################################################
-      ## nixosConfigurations
+      ##
+      ##   d8b   db d888888b db    db  .d88b.  .d8888. 
+      ##   888o  88   `88'   `8b  d8' .8P  Y8. 88'  YP 
+      ##   88V8o 88    88     `8bd8'  88    88 `8bo.   
+      ##   88 V8o88    88     .dPYb.  88    88   `Y8b. 
+      ##   88  V888   .88.   .8P  Y8. `8b  d8' db   8D 
+      ##   VP   V8P Y888888P YP    YP  `Y88P'  `8888Y' 
       ##
       ## install:
       ##   @TODO
@@ -307,45 +401,53 @@
       ## usage:
       ##   nixos-rebuild switch --flake .#bistroserve
 
-      nixosConfigurations = forAllNixosSystems (
-        system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
-          installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
-            inherit system;
-            modules = [ ./nixos/custom-iso.nix ];
-            format = "install-iso";
-          };
+      # nixosConfigurations = forAllNixosSystems (
+      #   system:
+      #   let
+      #     pkgs = nixpkgsFor.${system};
+      #   in
+      #   {
+      #     installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
+      #       inherit system;
+      #       modules = [ ./nixos/custom-iso.nix ];
+      #       format = "install-iso";
+      #     };
 
-          installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
-            inherit system;
-            modules = [ ./nixos/custom-iso.nix ];
-            format = "install-iso";
-          };
+      #     installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
+      #       inherit system;
+      #       modules = [ ./nixos/custom-iso.nix ];
+      #       format = "install-iso";
+      #     };
 
-          bistroserve = nixpkgs.lib.nixosSystem {
-            specialArgs = {
-              inherit pkgs inputs;
-            };
-            modules = [
-              ./nixos/nix-nixpkgs-conf.nix
-              ./nixos/bistroserve
-              home-manager.nixosModules.home-manager
-              #nix-flatpak.nixosModules.nix-flatpak
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.users.mike = import ./home/mike;
-                #home-manager.extraSpecialArgs = { };
-              }
-            ];
-          };
-        }
-      );
+      #     bistroserve = nixpkgs.lib.nixosSystem {
+      #       specialArgs = {
+      #         inherit pkgs inputs;
+      #       };
+      #       modules = [
+      #         ./nixos/nix-nixpkgs-conf.nix
+      #         ./nixos/bistroserve
+      #         home-manager.nixosModules.home-manager
+      #         #nix-flatpak.nixosModules.nix-flatpak
+      #         {
+      #           home-manager.useGlobalPkgs = true;
+      #           home-manager.useUserPackages = true;
+      #           home-manager.users.mike = import ./home/mike;
+      #           #home-manager.extraSpecialArgs = { };
+      #         }
+      #       ];
+      #     };
+      #   }
+      # );
 
       ##############################################################################################
+      ##
+      ##   d8888b.  .d8b.  d8888b. db   d8b   db d888888b d8b   db 
+      ##   88  `8D d8' `8b 88  `8D 88   I8I   88   `88'   888o  88 
+      ##   88   88 88ooo88 88oobY' 88   I8I   88    88    88V8o 88 
+      ##   88   88 88~~~88 88`8b   Y8   I8I   88    88    88 V8o88 
+      ##   88  .8D 88   88 88 `88. `8b d8'8b d8'   .88.   88  V888 
+      ##   Y8888D' YP   YP 88   YD  `8b8' `8d8'  Y888888P VP   V8P 
+      ##
       ## darwinConfigurations
       ##
       ## installation:
@@ -368,7 +470,6 @@
             modules = [
               ./darwin/trillian
               home-manager.darwinModules.home-manager
-              #self.homeConfigurations.mike-trillian
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
@@ -399,7 +500,45 @@
       );
 
       ##############################################################################################
-      ## homeConfigurations
+      ##
+      ##   .d8888. db    db .d8888. d888888b d88888b .88b  d88. 
+      ##   88'  YP `8b  d8' 88'  YP `~~88~~' 88'     88'YbdP`88 
+      ##   `8bo.    `8bd8'  `8bo.      88    88ooooo 88  88  88 
+      ##     `Y8b.    88      `Y8b.    88    88~~~~~ 88  88  88 
+      ##   db   8D    88    db   8D    88    88.     88  88  88 
+      ##   `8888Y'    YP    `8888Y'    YP    Y88888P YP  YP  YP 
+      ##
+      ## stand-alone (macOS, NixOS and normal linux distributions)
+      ##   IMPORTANT: only use each home configuration when logged in to the respective user account
+      ##
+      ## initial installation:
+      ##   nix run 'github:numtide/system-manager' -- switch --flake '.'
+      ##
+      ## usage:
+      ##   home-manager switch --flake .#<name>
+
+      systemConfigs.default = system-manager.lib.makeSystemConfig {
+        modules = [
+          ./modules
+          nix-system-graphics.systemModules.default
+          ({
+            config = {
+              nixpkgs.hostPlatform = "x86_64-linux";
+              system-manager.allowAnyDistro = true;
+              system-graphics.enable = true;
+            };
+          })
+        ];
+      };
+
+      ##############################################################################################
+      ##
+      ##  db   db  .d88b.  .88b  d88. d88888b 
+      ##  88   88 .8P  Y8. 88'YbdP`88 88'     
+      ##  88ooo88 88    88 88  88  88 88ooooo 
+      ##  88~~~88 88    88 88  88  88 88~~~~~ 
+      ##  88   88 `8b  d8' 88  88  88 88.     
+      ##  YP   YP  `Y88P'  YP  YP  YP Y88888P 
       ##
       ## stand-alone (macOS, NixOS and normal linux distributions)
       ##   IMPORTANT: only use each home configuration when logged in to the respective user account
@@ -430,7 +569,13 @@
         };
 
       ##############################################################################################
-      ## devShells
+      ##
+      ##   d8888b. d88888b db    db .d8888. db   db d88888b db      db      .d8888. 
+      ##   88  `8D 88'     88    88 88'  YP 88   88 88'     88      88      88'  YP 
+      ##   88   88 88ooooo Y8    8P `8bo.   88ooo88 88ooooo 88      88      `8bo.   
+      ##   88   88 88~~~~~ `8b  d8'   `Y8b. 88~~~88 88~~~~~ 88      88        `Y8b. 
+      ##   88  .8D 88.      `8bd8'  db   8D 88   88 88.     88booo. 88booo. db   8D 
+      ##   Y8888D' Y88888P    YP    `8888Y' YP   YP Y88888P Y88888P Y88888P `8888Y' 
       ##
       ## nix develop [.#default] [--impure]
 
@@ -458,7 +603,13 @@
       );
 
       ##############################################################################################
-      ## checks
+      ##
+      ##    .o88b. db   db d88888b  .o88b. db   dD .d8888. 
+      ##   d8P  Y8 88   88 88'     d8P  Y8 88 ,8P' 88'  YP 
+      ##   8P      88ooo88 88ooooo 8P      88,8P   `8bo.   
+      ##   8b      88~~~88 88~~~~~ 8b      88`8b     `Y8b. 
+      ##   Y8b  d8 88   88 88.     Y8b  d8 88 `88. db   8D 
+      ##    `Y88P' YP   YP Y88888P  `Y88P' YP   YD `8888Y' 
       ##
       ## nix check [.#default]
 
