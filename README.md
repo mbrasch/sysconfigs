@@ -136,10 +136,10 @@ sudo rm /Library/LaunchDaemons/org.nixos.darwin.check-zshrc-nix-hook.plist
 
 ### Repo klonen
 
-das Zielverzeichnis hängt vom jeweiligen Fall ab. `@TODO`
+Grundsätzlich kann das Repo in einem beliebigen Ordner liegen, Je nach Nutzung böten sich aber folgende Ordner an: `@TODO`
 
 - für home-manager (stand-alone): `~/.config/home-manager`
-- für nix-darwin (incl. home-manager): `@TODO`
+- für nix-darwin (incl. home-manager): `~/.config/nix-darwin` oder `/etc/nix-darwin`
 - für system-manager (incl. home-manager): `@TODO`
 - für NixOS (incl. home-manager): `/etc/nixos`
 
@@ -149,10 +149,10 @@ git clone git@github.com:mbrasch/sysconfigs.git <destination>
 
 ### Konfiguration anpassen
 
- :warning: you need to adjust some values in `./flake.nix`:
+ :warning: Zu erst sollte die Datei `./flake.nix` an die eigenen Bedürfnisse angepasst werden:
 
-- `username` and `system` in `homeConfigurations.<username>`. The `username` must be equal to your username on your system. In in this configuration, it is assumed that the home folder is named like the username.
-- `hostname` in `darwinConfiguration.<hostname>`. The `hostname` should be equal to the hostname of your system.
+- `username` und `system` in `homeConfigurations.<username>`
+- `hostname` in `darwinConfiguration.<hostname>`
 
 
 
@@ -161,6 +161,8 @@ git clone git@github.com:mbrasch/sysconfigs.git <destination>
 ## home-manager (stand-alone)
 
 (macOS, Linux, NixOS, Windows/WSL)
+
+> :warning: When using home-manager stand-alone, you have to configure nix via /etc/nix.nix.conf. (home-manager is only for user configuration.)
 
 ### Installation
 
@@ -248,7 +250,7 @@ home-manager uninstall
 ### Installation
 
 ```shell
-# build the base configuration
+# build and install the base configuration
 nix run nix-darwin -- switch --flake ".#trillian"
 
 # delete this, otherwise darwin-rebuild will fail to create a symlink

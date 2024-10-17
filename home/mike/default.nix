@@ -8,7 +8,6 @@
   config,
   osConfig,
   options,
-  #system,
   lib,
   username,
   inputs,
@@ -25,7 +24,6 @@ in
     # You can split up your configuration and import pieces of it here:
     ../common/zsh.nix
     ../common/shell-tools.nix
-    #../common/nix-nixpkgs-conf.nix
     ../common/dotfiles.nix
     #../common/ssh.nix
 
@@ -75,6 +73,9 @@ in
       EDITOR = "nano";
     };
 
+    # Tell it to map everything in the `config` directory in this repository to the `.config` in my home directory
+    #file.".config" = { source = ./config; recursive = true; };
+
     file = {
       #"${config.xdg.configHome}/neofetch/config.conf".text = builtins.readFile ./neofetch.conf;
     };
@@ -93,178 +94,185 @@ in
     #   the package name.
     # - to search for packages you can use https://search.nixos.org/packages or 'nix-search'
 
-    packages = with pkgs; [
-      nixVersions.latest
+    packages =
+      with pkgs;
+      [
+        nixVersions.latest
 
-      #------------------------------------------
-      # fonts
+        #------------------------------------------
+        # fonts
 
-      # we don't need all nerdfonts, so we overwrite the list of fonts to install
-      (nerdfonts.override {
-        fonts = [
-          "Noto"
-          "FiraCode"
-          "SourceCodePro"
-          "UbuntuMono"
-          "Meslo"
-        ];
-      })
+        # we don't need all nerdfonts, so we overwrite the list of fonts to install
+        (nerdfonts.override {
+          fonts = [
+            "Noto"
+            "FiraCode"
+            "SourceCodePro"
+            "UbuntuMono"
+            "Meslo"
+          ];
+        })
 
-      #------------------------------------------
-      # nix tools
-      #
-      # to find the exact package name from a flake, you can look into the corresponding flake
-      #     -> output.packages.${system}.<name>
-      inputs.nix-search.packages.${system}.nix-search
-      #inputs.grep-nixos-cache.defaultPackage.${system}
-      #inputs.nix-fast-build.packages.${pkgs.system}.nix-fast-build
-      inputs.nix2sbom.packages.${system}.default
+        #------------------------------------------
+        # nix tools
+        #
+        # to find the exact package name from a flake, you can look into the corresponding flake
+        #     -> output.packages.${system}.<name>
+        inputs.nix-search.packages.${system}.nix-search
+        #inputs.grep-nixos-cache.defaultPackage.${system}
+        #inputs.nix-fast-build.packages.${pkgs.system}.nix-fast-build
+        inputs.nix2sbom.packages.${system}.default
 
-      cachix # command line client for Nix binary cache hosting https://cachix.org
-      nix-diff # explain why two Nix derivations differ
-      nix-info # get high level info to help with debugging
-      nix-init # generate Nix packages from URLs
-      nix-melt # ranger-like flake.lock viewer
-      nix-output-monitor # parses output of nix-build to show additional information
-      nix-tree # interactively browse a Nix store paths dependencies
-      nix-inspect # interactive TUI for inspecting nix configs and other expressions
-      nixos-shell
-      nixfmt-rfc-style # nix formatter
-      nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
-      nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
-      devenv
+        cachix # command line client for Nix binary cache hosting https://cachix.org
+        nix-diff # explain why two Nix derivations differ
+        nix-info # get high level info to help with debugging
+        nix-init # generate Nix packages from URLs
+        nix-melt # ranger-like flake.lock viewer
+        nix-output-monitor # parses output of nix-build to show additional information
+        nix-tree # interactively browse a Nix store paths dependencies
+        nix-inspect # interactive TUI for inspecting nix configs and other expressions
+        nixos-shell
+        nixfmt-rfc-style # nix formatter
+        nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
+        nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
+        devenv
 
-      #------------------------------------------
-      # shell tools
+        #------------------------------------------
+        # shell tools
 
-      # modernized commands
+        # modernized commands
 
-      procs # modern ps
-      eza # modern ls
-      dua # modern du
-      duf # modern df
-      gping # ping with graph
-      ripgrep # modern grep
-      tokei # modern wc for code
+        procs # modern ps
+        eza # modern ls
+        dua # modern du
+        duf # modern df
+        gping # ping with graph
+        ripgrep # modern grep
+        tokei # modern wc for code
+        htop
 
-      # the rest
+        # the rest
 
-      mtr-gui # tracerout + ping
-      ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
-      fastfetch # like neofetch, but much faster because written in C
-      #macchina # like neofetch, but much faster because written in Rust
-      #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
-      tree # list directories in a tree
-      wakeonlan
-      # wimlib # extract, create, and modify WIM files : build error
-      coreutils # GNU Core Utilities
-      davmail # Microsoft Exchange server as local CALDAV, IMAP and SMTP servers
-      #figlet # make large letters out of ordinary text
-      helix # post-modern modal text editor
-      shell-gpt # ChatGPT in your terminal
-      libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
-      android-tools
-      asitop # Perf monitoring CLI tool for Apple Silicon
-      thefuck
-      f3 # Fight Flash Fraud
-      tmux
+        mtr-gui # tracerout + ping
+        ncdu # du with ncurses interface -> build error unable to create compilation: TargetRequiresPIE
+        fastfetch # like neofetch, but much faster because written in C
+        #macchina # like neofetch, but much faster because written in Rust
+        #tectonic # modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive
+        tree # list directories in a tree
+        wakeonlan
+        # wimlib # extract, create, and modify WIM files : build error
+        coreutils # GNU Core Utilities
+        davmail # Microsoft Exchange server as local CALDAV, IMAP and SMTP servers
+        #figlet # make large letters out of ordinary text
+        helix # post-modern modal text editor
+        shell-gpt # ChatGPT in your terminal
+        libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
+        android-tools
+        asitop # Perf monitoring CLI tool for Apple Silicon
+        thefuck
+        f3 # Fight Flash Fraud
+        tmux
 
-      git
-      lazygit # simple terminal UI for git commands
-      git-absorb # git commit --fixup, but automatic
+        git
+        lazygit # simple terminal UI for git commands
+        git-absorb # git commit --fixup, but automatic
 
-      inxi
-      #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
+        inxi
+        #(inxi.override { withRecommends = true; }) # A full featured CLI system information tool
 
-      #ollama
-      #aichat
-      tailscale
-      sshs
+        #ollama
+        #aichat
+        tailscale
+        sshs
 
-      #------------------------------------------
-      # linux-only tools
+        #------------------------------------------
+        # https://libimobiledevice.org
 
-      #(pkgs.lib.optionals pkgs.stdenv.isLinux iproute2) # error: A definition for option `home.packages."[definition 1-entry 43]"' is not of type `package'.
-      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux iproute2) # rtstat rdma ss rtacct arpd routel ip ctstat vdpa nstat ifstat dcb tc devlink rtmon lnstat tipc bridge genl
-      #(lib.mkIf pkgs.stdenv.hostPlatform.isNixos nix-ld) # Run unpatched dynamic binaries on NixOS
+        #idevicerestore # Restore/upgrade firmware of iOS and macOS/AS devices
+        #ideviceinstaller # List/modify installed apps of iOS devices
 
-      #------------------------------------------
-      # https://libimobiledevice.org
+        #------------------------------------------
+        # docker
 
-      #idevicerestore # Restore/upgrade firmware of iOS and macOS/AS devices
-      #ideviceinstaller # List/modify installed apps of iOS devices
+        docker
+        docker-compose
+        dockerfile-language-server-nodejs
+        docker-compose-language-service
 
-      #------------------------------------------
-      # docker
+        #------------------------------------------
+        # languages
 
-      docker
-      docker-compose
-      dockerfile-language-server-nodejs
-      docker-compose-language-service
+        nodejs
 
-      #------------------------------------------
-      # languages
+        (python3.withPackages (p: [
+          p.black
+          p.flake8
+          p.pyls-isort
+          p.python-lsp-black
+          p.python-lsp-server
+        ]))
+        #python3Full
+        #python3Packages.black
+        #python3Packages.flake8
+        #python3Packages.pyls-isort
+        #python311Packages.python-lsp-black
+        #python311Packages.python-lsp-server
 
-      nodejs
+        # php # failed to build php-soap-8.2.24
 
-      (python3.withPackages (p: [
-        p.black
-        p.flake8
-        p.pyls-isort
-        p.python-lsp-black
-        p.python-lsp-server
-      ]))
-      #python3Full
-      #python3Packages.black
-      #python3Packages.flake8
-      #python3Packages.pyls-isort
-      #python311Packages.python-lsp-black
-      #python311Packages.python-lsp-server
+        clang_19
+        clang-tools
+        clang-manpages
 
-      # php # failed to build php-soap-8.2.24
+        rustc # rust compiler
+        rustfmt # rust code formatter
+        clippy
+        cargo
 
-      clang_19
-      clang-tools
-      clang-manpages
+        shellcheck # shell script analysis tool
+        shfmt # shell parser and formatter
 
-      rustc # rust compiler
-      rustfmt # rust code formatter
-      clippy
-      cargo
+        go
+        gopls # language server
+        delve # debugger
 
-      shellcheck # shell script analysis tool
-      shfmt # shell parser and formatter
+        jq # command-line JSON processor
+        jiq # interactive jq
+        yq-go # jq for yaml
 
-      go
-      gopls # language server
-      delve # debugger
+        vimPlugins.copilot-vim # for "Copilot for Xcode"
 
-      jq # command-line JSON processor
-      jiq # interactive jq
-      yq-go # jq for yaml
+        mermaid-cli # generate diagrams and flowcharts from text in a similar manner as markdown
 
-      vimPlugins.copilot-vim # for "Copilot for Xcode"
+        #------------------------------------------
+        # gui apps
 
-      mermaid-cli # generate diagrams and flowcharts from text in a similar manner as markdown
+        sniffnet
+        #diffuse # diff tool
+        #meld # diff tool (on macos: start via shell)
+        #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration
 
-      #------------------------------------------
-      # gui apps
+        #------------------------------------------
+        # my own packages
 
-      sniffnet
-      #diffuse # diff tool
-      #meld # diff tool (on macos: start via shell)
-      #qownnotes # Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration
+        #( pkgs.callPackage ./pkgs/foobar.nix )
 
-      #------------------------------------------
-      # brew casks (via brew-nix)
+      ]
+      ++ lib.optionals stdenv.isLinux [
+        iproute2 # rtstat rdma ss rtacct arpd routel ip ctstat vdpa nstat ifstat dcb tc devlink rtmon lnstat tipc bridge genl
+      ]
+      # @TODO: optionally only for NixOS
+      ++ lib.optionals stdenv.isLinux [
+        nix-ld # Run unpatched dynamic binaries on NixOS
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        # inputs.brewCasks.marta
+      ];
 
-      #brewCasks.marta
+    # valid systems are:
+    #   isLinux, isDarwin, isBSD, isFreeBSD, isNetBSD, isCygwin, isWasm, isWindows, …
+    #   isX86_64, isAarch64, isPower, isAarch32, …
 
-      #------------------------------------------
-      # my own packages
-
-      #( pkgs.callPackage ./pkgs/foobar.nix )
-    ];
   };
 
   ##################################################################################################

@@ -101,8 +101,8 @@
     # nix modules for darwin (the equivalent of NixOS modules for macOS)
     # documentation: https://daiderd.com/nix-darwin
     # options:       https://daiderd.com/nix-darwin/manual
-    darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin.url = "github:lnl7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage system config using nix on any linux distro
     # documentation: https://github.com/numtide/system-manager
@@ -121,7 +121,7 @@
 
     # Externally extensible flake systems
     # documentation: https://github.com/nix-systems/nix-systems
-    systems.url = "github:nix-systems/default";
+    nix-systems.url = "github:nix-systems/default";
 
     # Homebrew installation manager for nix-darwin
     # documentation: https://github.com/zhaofengli/nix-homebrew
@@ -135,34 +135,23 @@
 
     # Modular server management based on NixOS modules and focused on best practices
     # documentation: https://shb.skarabox.com/
-    selfhostblocks.url = "github:ibizaman/selfhostblocks";
+    #selfhostblocks.url = "github:ibizaman/selfhostblocks";
 
     # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an
     # opinionated file structure.
     # documentation: https://snowfall.org/guides/lib/quickstart/
-    snowfall-lib.url = "github:snowfallorg/lib";
-    snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Homebrew casks, nixified
-    # documentation: https://github.com/jacekszymanski/nixcasks/
-    #nixcasks.url = "github:jacekszymanski/nixcasks";
-    #nixcasks.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Experimental nix expression to package all MacOS casks from homebrew automatically
-    #brew-nix.url = "github:BatteredBunny/brew-nix";
-    #brew-nix.inputs.nixpkgs.follows = "nixpkgs";
-    #brew-api.url = "github:BatteredBunny/brew-api";
-    #brew-api.flake = false;
+    #snowfall-lib.url = "github:snowfallorg/lib";
+    #snowfall-lib.inputs.nixpkgs.follows = "nixpkgs";
 
     # Run macOS, Windows and more via a single Nix command, or simple nixosModules
     # documentation: https://github.com/matthewcroughan/NixThePlanet
-    nixtheplanet.url = "github:matthewcroughan/NixThePlanet";
-    nixtheplanet.inputs.nixpkgs.follows = "nixpkgs";
+    #nixtheplanet.url = "github:matthewcroughan/NixThePlanet";
+    #nixtheplanet.inputs.nixpkgs.follows = "nixpkgs";
 
     # Build, share, and run your local development environments with a single command. Without containers.
     # documentation: https://devenv.sh/getting-started/
-    devenv.url = "github:cachix/devenv";
-    devenv.inputs.nixpkgs.follows = "nixpkgs";
+    #devenv.url = "github:cachix/devenv";
+    #devenv.inputs.nixpkgs.follows = "nixpkgs";
 
     # CLI for searching packages on search.nixos.org
     nix-search.url = "github:peterldowns/nix-search-cli";
@@ -204,12 +193,12 @@
 
     # Extra home manager modules
     # documentation: https://github.com/schuelermine/xhmm
-    #xhmm.url = "github:schuelermine/xhmm";
+    xhmm.url = "github:schuelermine/xhmm";
 
     # System-wide colorscheming and typography for NixOS and Home Manager
     # documentation: https://danth.github.io/stylix/
-    #stylix.url = "github:danth/stylix";
-    #stylix.inputs.nixpkgs.follows = "nixpkgs";
+    stylix.url = "github:danth/stylix";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Modules and schemes to make theming with Nix awesome.
     # documentation: https://github.com/misterio77/nix-colors
@@ -227,10 +216,6 @@
     attic.inputs.nixpkgs.follows = "nixpkgs";
     attic.inputs.nixpkgs-stable.follows = "nixpkgs";
 
-    # for the Nix docker image
-    #nix.url = "github:nixos/nix";
-    #nix.inputs.nixpkgs.follows = "nixpkgs";
-
     # Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process
     nix-fast-build.url = "github:Mic92/nix-fast-build";
     nix-fast-build.inputs.nixpkgs.follows = "nixpkgs";
@@ -241,7 +226,7 @@
 
     # Install flatpaks declaratively
     # documentation: https://github.com/gmodena/nix-flatpak
-    #nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     # nix2sbom extracts the SBOM (Software Bill of Materials) from a Nix derivation
     # documentation: https://github.com/louib/nix2sbom/wiki/
@@ -279,7 +264,7 @@
       nixpkgs,
       nixos,
       nixos-hardware,
-      darwin,
+      nix-darwin,
       nix-homebrew,
       home-manager,
       system-manager,
@@ -456,16 +441,15 @@
       ## usage:
       ##   darwin-rebuild switch --flake .#<name>
 
-      darwinConfigurations = forAllDarwinSystems (
-        system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
-          trillian = darwin.lib.darwinSystem {
+      darwinConfigurations = {
+        trillian =
+          let
+            username = "mike";
+          in
+          nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
             specialArgs = {
-              inherit self inputs;
+              inherit self inputs username;
             };
             modules = [
               ./darwin/trillian
@@ -473,31 +457,34 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.mike = import ./home/mike;
+                home-manager.users.mike = import ./home/${username};
                 home-manager.extraSpecialArgs = {
-                  inherit inputs;
-                  username = "mike";
+                  inherit inputs username;
+                  #username = "mike";
                 };
               }
 
               #nix-homebrew.darwinModules.nix-homebrew
               #{
               #  nix-homebrew = {
-              #    user = "mike";
               #    enable = true;
+              #    enableRosetta = false;
+              #    mutableTaps = false; # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
+              #    autoMigrate = true;
+              #    user = "mike";
+              #
+              #    # Optional: Declarative tap management
               #    taps = {
               #      "homebrew/homebrew-core" = inputs.homebrew-core;
               #      "homebrew/homebrew-cask" = inputs.homebrew-cask;
               #      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
               #    };
-              #    mutableTaps = false;
-              #    autoMigrate = true;
+              #    
               #  };
               #}
             ];
           };
-        }
-      );
+      };
 
       ##############################################################################################
       ##
@@ -517,19 +504,19 @@
       ## usage:
       ##   home-manager switch --flake .#<name>
 
-      systemConfigs.default = system-manager.lib.makeSystemConfig {
-        modules = [
-          ./modules
-          nix-system-graphics.systemModules.default
-          ({
-            config = {
-              nixpkgs.hostPlatform = "x86_64-linux";
-              system-manager.allowAnyDistro = true;
-              system-graphics.enable = true;
-            };
-          })
-        ];
-      };
+      # systemConfigs.default = system-manager.lib.makeSystemConfig {
+      #   modules = [
+      #     ./modules
+      #     nix-system-graphics.systemModules.default
+      #     ({
+      #       config = {
+      #         nixpkgs.hostPlatform = "x86_64-linux";
+      #         system-manager.allowAnyDistro = true;
+      #         system-graphics.enable = true;
+      #       };
+      #     })
+      #   ];
+      # };
 
       ##############################################################################################
       ##
