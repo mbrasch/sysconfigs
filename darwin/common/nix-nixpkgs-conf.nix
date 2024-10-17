@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   config,
+  username,
   ...
 }:
 {
@@ -80,7 +81,7 @@
       # and https://discourse.nixos.org/t/nixpkgs-unfree-configs-not-respected/20546/9
       allowUnfreePredicate = (_: true);
 
-      experimental-features = "nix-command flakes";
+      experimental-features = config.nix.experimental-features; # "nix-command flakes";
     };
   };
 }
