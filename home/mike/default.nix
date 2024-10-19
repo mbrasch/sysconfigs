@@ -281,8 +281,8 @@ in
   programs = {
     home-manager = {
       enable = true;
-      #path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
-      path = pkgs.lib.mkForce "/Volumes/Shared/Repositories/Privat/sysconfigs";
+      path = pkgs.lib.mkForce "${config.xdg.configHome}/home-manager";
+      #path = pkgs.lib.mkForce "/Volumes/Shared/Repositories/Privat/sysconfigs";
     };
 
     vscode = {

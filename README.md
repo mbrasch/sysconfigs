@@ -174,11 +174,19 @@ git clone git@github.com:mbrasch/sysconfigs.git <destination>
 
 ```shell
 # build configuration
-nix build .#homeConfigurations.<username>.activationPackage
+nix build .#homeConfigurations.<username>.activationPackage [--refresh]
 
 # apply configuration
 ./result/activate
 ```
+
+Falls man bei `nix build` direkt von einem Git-Repo baut und der Build abbricht und man eine Änderung an der Konfig auf dem Git vornimmt, kann man Nix zwingen die Konfig neu aus dem Repo zu laden:
+
+```shell
+nix flake update --flake github:mrasch/sysconfigs
+```
+
+
 
 ### Regulare Nutzung
 
