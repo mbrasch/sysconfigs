@@ -168,7 +168,6 @@ in
         shell-gpt # ChatGPT in your terminal
         libimobiledevice # A cross-platform protocol library to access iOS devices (and Apple Silicon Macs)
         android-tools
-        asitop # Perf monitoring CLI tool for Apple Silicon
         thefuck
         f3 # Fight Flash Fraud
         tmux
@@ -266,6 +265,7 @@ in
         nix-ld # Run unpatched dynamic binaries on NixOS
       ]
       ++ lib.optionals stdenv.isDarwin [
+        asitop # Perf monitoring CLI tool for Apple Silicon
         # inputs.brewCasks.marta
       ];
 
