@@ -147,9 +147,15 @@ Grundsätzlich kann das Repo in einem beliebigen Ordner liegen, Je nach Nutzung 
 git clone git@github.com:mbrasch/sysconfigs.git <destination>
 ```
 
+> :warning: z.B. wenn man die gewünschte Konfig auf der jeweiligen Maschine niemals ändern möchte (also immer nur die aktuellste Git-Version), kann man auch auf das Clonen des Repos verzichten.
+>
+> In dem Fall setzt man anstelle des Punktes (z.B. `home-manager switch --flake .#<config-name>`) die Git-Adresse ein (z.B. `home-manager switch --flake github:mbrasch/sysconfigs#<config-name>`).
+>
+> :warning: eigentlich selbstredend, aber vorsichtshalber sei erwähnt: dazu muß allerdings schon die Konfig für die jeweilige Machine Git-Repo angelegt sein
+
 ### Konfiguration anpassen
 
- :warning: Zu erst sollte die Datei `./flake.nix` an die eigenen Bedürfnisse angepasst werden:
+ :warning: Sofern noch nicht geschehen: zuerst sollte die Datei `./flake.nix` an die eigenen Bedürfnisse angepasst werden:
 
 - `username` und `system` in `homeConfigurations.<username>`
 - `hostname` in `darwinConfiguration.<hostname>`

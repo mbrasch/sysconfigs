@@ -433,26 +433,31 @@
       ##   88  .8D 88   88 88 `88. `8b d8'8b d8'   .88.   88  V888 
       ##   Y8888D' YP   YP 88   YD  `8b8' `8d8'  Y888888P VP   V8P 
       ##
-      ## darwinConfigurations
-      ##
       ## installation:
-      ##   @TODO
+      ##   nix run nix-darwin -- switch --flake ".[#<name>]"
       ##
       ## usage:
-      ##   darwin-rebuild switch --flake .#<name>
+      ##   darwin-rebuild switch --flake ".[#<name>]""
 
       darwinConfigurations = {
         trillian =
           let
+            hostname = "trillian";
             username = "mike";
+            system = "aarch64-darwin";
           in
           nix-darwin.lib.darwinSystem {
-            system = "aarch64-darwin";
+            inherit system;
             specialArgs = {
-              inherit self inputs username;
+              inherit
+                self
+                inputs
+                username
+                hostname
+                ;
             };
             modules = [
-              ./darwin/trillian
+              ./darwin/${hostname}
               home-manager.darwinModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
@@ -460,7 +465,6 @@
                 home-manager.users.mike = import ./home/${username};
                 home-manager.extraSpecialArgs = {
                   inherit inputs username;
-                  #username = "mike";
                 };
               }
 
@@ -552,7 +556,7 @@
         {
           mike-trillian = mkHomeConfig "aarch64-darwin" "mike";
           mike-tuxedo = mkHomeConfig "x86_64-linux" "mike";
-          mike-aarch64-linux = mkHomeConfig "aarch64-linux" "mike";
+          mike-linuxvm = mkHomeConfig "aarch64-linux" "mike";
         };
 
       ##############################################################################################
