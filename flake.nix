@@ -544,19 +544,19 @@
       homeConfigurations =
         let
           mkHomeConfig =
-            system: username:
+            system: username: configName:
             home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgsFor.${system};
               extraSpecialArgs = {
-                inherit inputs username;
+                inherit inputs username configName;
               };
               modules = [ ./home/${username} ];
             };
         in
         {
-          mike-trillian = mkHomeConfig "aarch64-darwin" "mike";
-          mike-tuxedo = mkHomeConfig "x86_64-linux" "mike";
-          mike-linuxvm = mkHomeConfig "aarch64-linux" "mike";
+          mike-trillian = mkHomeConfig "aarch64-darwin" "mike" "mike-trillian";
+          mike-tuxedo = mkHomeConfig "x86_64-linux" "mike" "mike-tuxedo";
+          mike-linuxvm = mkHomeConfig "aarch64-linux" "mike" "mike-linuxvm";
         };
 
       ##############################################################################################
