@@ -8,9 +8,9 @@
   home = {
     shellAliases = {
       hms = "home-manager switch --flake '${config.programs.home-manager.path}#${configName}'";
-      hmu = "nix flake update ${config.programs.home-manager.path} && hms";
+      hmu = "nix flake update --flake ${config.programs.home-manager.path} && hms";
       hmgc = "home-manager generations expire-generations '-1 days'";
-      hmpush = "cd ${config.programs.home-manager.path} && git commit -a -m '.' && git push";
+      hmpull = "git -C ${config.programs.home-manager.path} && pull";
     };
 
     sessionVariables = { };
