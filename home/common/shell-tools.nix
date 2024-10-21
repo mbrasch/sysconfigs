@@ -1,13 +1,13 @@
 {
   pkgs,
   config,
-  configName,
+  configname,
   ...
 }:
 {
   home = {
     shellAliases = {
-      hms = "home-manager switch --flake '${config.programs.home-manager.path}#${configName}'";
+      hms = "home-manager switch --flake '${config.programs.home-manager.path}#${configname}'";
       hmu = "nix flake update --flake ${config.programs.home-manager.path} && hms";
       hmgc = "home-manager generations expire-generations '-1 days'";
       hmpull = "git -C ${config.programs.home-manager.path} pull";

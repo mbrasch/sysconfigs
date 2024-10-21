@@ -544,16 +544,18 @@
       homeConfigurations =
         let
           mkHomeConfig =
-            system: username: configName:
+            system: username: configname:
             home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgsFor.${system};
               extraSpecialArgs = {
-                inherit inputs username configName;
+                inherit inputs username configname;
               };
               modules = [ ./home/${username} ];
             };
         in
         {
+          # Übergabeparameter: architecture, username, configname
+          # configname wird in shell-tools.nix home.shellAliases genutzt
           mike-trillian = mkHomeConfig "aarch64-darwin" "mike" "mike-trillian";
           mike-tuxedo = mkHomeConfig "x86_64-linux" "mike" "mike-tuxedo";
           mike-linuxvm = mkHomeConfig "aarch64-linux" "mike" "mike-linuxvm";
