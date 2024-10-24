@@ -9,7 +9,9 @@
       {
 
       }
-      // (
+      //
+      # kommt nur zum tragen, wenn home-manager stand-alone genutzt wird
+      (
         if args ? configname then
           {
             hms = "home-manager switch --flake '${config.programs.home-manager.path}#${args.configname}'";

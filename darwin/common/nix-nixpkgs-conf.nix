@@ -32,16 +32,6 @@
 
       experimental-features = "nix-command flakes";
       #allowed-users = "*";
-
-      # linux-builder = {
-      #   enable = true;
-      #   #config = {}; # nixos config for the builder. normally you should not need this option
-      #   ephemeral = false; # set it true if you don't want the state of the builder (caveat: no benefit from the builders build cace.)
-      #   systems = [
-      #     "x86_64-linux"
-      #     "aarch64-linux"
-      #   ];
-      # };
     };
 
     extraOptions = ''
@@ -50,12 +40,25 @@
       extra-platforms = x86_64-darwin aarch64-darwin
       extra-trusted-users = ${username}
     '';
+
+    linux-builder = {
+      enable = true;
+      #config = {}; # nixos config for the builder. normally you should not need this option
+      ephemeral = false; # set it true if you don't want the state of the builder (caveat: no benefit from the builders build cace.)
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    };
   };
 
   # nixpkgs reference manual: https://nixos.org/manual/nixpkgs/stable/#chap-packageconfig
   nixpkgs = {
     # You can add overlays here
     overlays = [
+      #(import ./overrides/php81.nix)
+      #(import ../pkgs)
+
       # Add overlays your own flake exports (from overlays and pkgs dir):
       #outputs.overlays.additions
       #outputs.overlays.modifications
@@ -71,6 +74,7 @@
       #  });
       #})
     ];
+
     # Configure your nixpkgs instance
     config = {
       allowUnfree = true;
@@ -81,7 +85,7 @@
       # and https://discourse.nixos.org/t/nixpkgs-unfree-configs-not-respected/20546/9
       allowUnfreePredicate = (_: true);
 
-      experimental-features = config.nix.experimental-features; # "nix-command flakes";
+      #experimental-features = config.settings.nix.experimental-features;
     };
   };
 }
