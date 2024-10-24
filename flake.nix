@@ -468,24 +468,24 @@
                 };
               }
 
-              #nix-homebrew.darwinModules.nix-homebrew
-              #{
-              #  nix-homebrew = {
-              #    enable = true;
-              #    enableRosetta = false;
-              #    mutableTaps = false; # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
-              #    autoMigrate = true;
-              #    user = "mike";
-              #
-              #    # Optional: Declarative tap management
-              #    taps = {
-              #      "homebrew/homebrew-core" = inputs.homebrew-core;
-              #      "homebrew/homebrew-cask" = inputs.homebrew-cask;
-              #      "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-              #    };
-              #    
-              #  };
-              #}
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  enable = true;
+                  enableRosetta = true;
+                  mutableTaps = false; # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
+                  autoMigrate = true;
+                  user = username;
+
+                  # Optional: Declarative tap management
+                  taps = {
+                    "homebrew/homebrew-core" = inputs.homebrew-core;
+                    "homebrew/homebrew-cask" = inputs.homebrew-cask;
+                    "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+                  };
+
+                };
+              }
             ];
           };
       };

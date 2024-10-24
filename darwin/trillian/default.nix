@@ -11,6 +11,7 @@
   imports = [
     ../common/nix-nixpkgs-conf.nix
     #../common/yabai.nix
+    ./homebrew.nix
   ];
 
   # Auto upgrade nix package and the daemon service.

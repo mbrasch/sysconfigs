@@ -238,8 +238,6 @@ in
         jiq # interactive jq
         yq-go # jq for yaml
 
-        vimPlugins.copilot-vim # for "Copilot for Xcode"
-
         mermaid-cli # generate diagrams and flowcharts from text in a similar manner as markdown
 
         #------------------------------------------
@@ -266,6 +264,8 @@ in
       ]
       ++ lib.optionals stdenv.isDarwin [
         asitop # Perf monitoring CLI tool for Apple Silicon
+        vimPlugins.copilot-vim # for "Copilot for Xcode"
+
         # inputs.brewCasks.marta
       ];
 
