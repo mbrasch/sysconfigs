@@ -464,7 +464,7 @@
                 home-manager.useUserPackages = true;
                 home-manager.users.mike = import ./home/${username};
                 home-manager.extraSpecialArgs = {
-                  inherit inputs username;
+                  inherit inputs username hostname;
                 };
               }
 
@@ -556,6 +556,7 @@
         {
           # Übergabeparameter: architecture, username, configname
           # configname wird in shell-tools.nix home.shellAliases genutzt
+          #   wenn home-manager in nix-darwin bzw. nixos eingebettet ist
           mike-trillian = mkHomeConfig "aarch64-darwin" "mike" "mike-trillian";
           mike-tuxedo = mkHomeConfig "x86_64-linux" "mike" "mike-tuxedo";
           mike-linuxvm = mkHomeConfig "aarch64-linux" "mike" "mike-linuxvm";

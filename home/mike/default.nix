@@ -46,7 +46,6 @@ in
 
   xdg = {
     enable = true;
-    #configHome = "${config.home.homeDirectory}/.config";
   };
 
   manual = {

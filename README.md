@@ -10,7 +10,7 @@ Ich baue gerade alles um. Bereits (wieder) funktionierend:
 
 ## Einstieg
 
-Nix ist ein großes Ökosystem, das eine große Bandbreite abbildet:
+Nix deckt eine große Bandbreite ab:
 
 - Paketmanager:
   - Nix alleine benutzt sich wie ein normaler imperativer Paketmanager, wie z.B. APT.

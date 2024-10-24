@@ -1,17 +1,25 @@
 {
   pkgs,
   config,
-  configname,
   ...
-}:
+}@args:
 {
   home = {
-    shellAliases = {
-      hms = "home-manager switch --flake '${config.programs.home-manager.path}#${configname}'";
-      hmu = "nix flake update --flake ${config.programs.home-manager.path} && hms";
-      hmgc = "home-manager generations expire-generations '-1 days'";
-      hmpull = "git -C ${config.programs.home-manager.path} pull";
-    };
+    shellAliases =
+      {
+
+      }
+      // (
+        if args ? configname then
+          {
+            hms = "home-manager switch --flake '${config.programs.home-manager.path}#${args.configname}'";
+            hmu = "nix flake update --flake ${config.programs.home-manager.path} && hms";
+            hmgc = "home-manager generations expire-generations '-1 days'";
+            hmpull = "git -C ${config.programs.home-manager.path} pull";
+          }
+        else
+          { }
+      );
 
     sessionVariables = { };
   };

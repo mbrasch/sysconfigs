@@ -3,6 +3,8 @@
   config,
   pkgs,
   inputs,
+  username,
+  hostname,
   ...
 }@args:
 {
@@ -22,8 +24,8 @@
 
   #virtualisation.darwin-builder.hostPort = 10000; # default port is 31022
 
-  users.users.mike = {
-    name = "mike"; # config.home-manager.users.mike.home;
+  users.users.${username} = {
+    name = username; # config.home-manager.users.mike.home;
   };
 
   # The platform the configuration will be used on.
