@@ -37,12 +37,11 @@ in
     #( if pkgs.stdenv.hostPlatform.isLinux then ../common/stylix.nix else {} )
   ];
 
-  #nixpkgs = {
-  #  overlays = [ inputs.brew-nix.overlay.${builtins.currentSystem} ];
-  #};
-
   ##################################################################################################
   ## misc
+
+  # Whether to enable settings that make Home Manager work better on GNU/Linux distributions other than NixOS
+  targets.genericLinux.enable = true;
 
   xdg = {
     enable = true;
