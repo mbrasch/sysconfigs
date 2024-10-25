@@ -17,7 +17,14 @@
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
 
-  #virtualisation.darwin-builder.hostPort = 10000; # default port is 31022
+  documentation = {
+    enable = true;
+    doc.enable = true;
+    info.enable = true;
+    man.enable = true;
+  };
+
+  #darwinConfig = "$HOME/.nixpkgs/darwin-configuration.nix";
 
   users.users.${username} = {
     name = username; # config.home-manager.users.mike.home;
@@ -25,8 +32,46 @@
     isHidden = false;
     shell = pkgs.zsh;
   };
+
+  # ------------------------------------------------------------------------------------------------
+
+  # The set of packages that appear in /run/current-system/sw. These packages are automatically available to all users, and are automatically updated every time you rebuild the system configuration. (The latter is the main difference with installing them in the default profile, /nix/var/nix/profiles/default
+  environment.systemPackages = [
+    pkgs.cowsay
+  ];
+
+  environment.etc = { };
+
+  # List of additional package outputs to be symlinked into /run/current-system/sw
+  environment.extraOutputsToInstall = [ ];
+
+  # List of directories to be symlinked in /run/current-system/sw
+  environment.pathsToLink = [ ];
+
+  # Set of files that have to be linked in /Library/LaunchAgents
+  environment.launchAgents = { };
+
+  # Set of files that have to be linked in /Library/LaunchDaemons
+  environment.launchDaemons = { };
+
+  # Set of files that have to be linked in ~/Library/LaunchAgents
+  environment.userLaunchAgents = { };
+
+  # An attribute set that maps aliases (the top level attribute names in this option) to command strings or directly to build outputs. The alises are added to all users’ shells
+  environment.shellAliases = { };
+
+  # A list of permissible login shells for user accounts. No need to mention /bin/sh and other shells that are available by default on macOS
+  environment.shells = [ pkgs.zsh ];
+
+  # The set of paths that are added to PATH
+  environment.systemPath = [ ];
+
+  # ------------------------------------------------------------------------------------------------
+
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
+
+  # ------------------------------------------------------------------------------------------------
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -37,8 +82,6 @@
 
   # Turn off NIX_PATH warnings now that we're using flakes
   system.checks.verifyNixPath = false;
-
-  environment.systemPackages = [ pkgs.cowsay ];
 
   system.activationScripts = {
     applications = {

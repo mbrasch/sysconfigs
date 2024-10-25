@@ -437,7 +437,7 @@
       ##   nix run nix-darwin -- switch --flake ".[#<name>]"
       ##
       ## usage:
-      ##   darwin-rebuild switch --flake ".[#<name>]""
+      ##   darwin-rebuild switch --flake ".[#<name>]"
 
       darwinConfigurations = {
         trillian =
@@ -458,6 +458,7 @@
             };
             modules = [
               ./darwin/${hostname}
+              nix-homebrew.darwinModules.nix-homebrew
               home-manager.darwinModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
@@ -465,25 +466,6 @@
                 home-manager.users.mike = import ./home/${username};
                 home-manager.extraSpecialArgs = {
                   inherit inputs username;
-                };
-              }
-
-              nix-homebrew.darwinModules.nix-homebrew
-              {
-                nix-homebrew = {
-                  enable = true;
-                  enableRosetta = true;
-                  mutableTaps = false; # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
-                  autoMigrate = true;
-                  user = username;
-
-                  # Optional: Declarative tap management
-                  taps = {
-                    "homebrew/homebrew-core" = inputs.homebrew-core;
-                    "homebrew/homebrew-cask" = inputs.homebrew-cask;
-                    "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-                  };
-
                 };
               }
             ];

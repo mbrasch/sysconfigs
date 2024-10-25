@@ -257,6 +257,7 @@ in
       ++ lib.optionals stdenv.isLinux [
         iproute2 # rtstat rdma ss rtacct arpd routel ip ctstat vdpa nstat ifstat dcb tc devlink rtmon lnstat tipc bridge genl
         ulauncher # application launcher
+        alacritty
       ]
       # @TODO: optionally only for NixOS
       ++ lib.optionals stdenv.isLinux [
