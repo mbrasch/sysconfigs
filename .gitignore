@@ -6,6 +6,7 @@
 **/.direnv/
 **/.envrc
 result/
+flake.lock
 
 # editors
 .nova/
