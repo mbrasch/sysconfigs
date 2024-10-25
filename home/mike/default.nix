@@ -258,11 +258,13 @@ in
         iproute2 # rtstat rdma ss rtacct arpd routel ip ctstat vdpa nstat ifstat dcb tc devlink rtmon lnstat tipc bridge genl
         ulauncher # application launcher
         alacritty
+        nix-ld # Run unpatched dynamic binaries on NixOS
+
       ]
       # @TODO: optionally only for NixOS
-      ++ lib.optionals stdenv.isLinux [
-        nix-ld # Run unpatched dynamic binaries on NixOS
-      ]
+      # ++ lib.optionals stdenv.isLinux [
+      #   nix-ld # Run unpatched dynamic binaries on NixOS
+      # ]
       ++ lib.optionals stdenv.isDarwin [
         asitop # Perf monitoring CLI tool for Apple Silicon
         vimPlugins.copilot-vim # for "Copilot for Xcode"
