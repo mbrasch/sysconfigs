@@ -5,7 +5,7 @@
 **/.devenv/
 **/.direnv/
 **/.envrc
-result/
+result*
 flake.lock
 
 # editors

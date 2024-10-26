@@ -2,10 +2,15 @@
   pkgs,
   inputs,
   username,
+  config,
   ...
 }:
 {
+  # opt out from sending analytics. https://docs.brew.sh/Analytics
   environment.variables.HOMEBREW_NO_ANALYTICS = "1";
+
+  # ------------------------------------------------------------------------------------------------
+  # documentation: https://github.com/zhaofengli/nix-homebrew
 
   nix-homebrew = {
     enable = true;
@@ -73,6 +78,17 @@
     # List of Homebrew casks to install
     casks = [
       "iterm2@beta"
+      "utm@beta"
+      "sf-symbols"
+      "font-sf-arabic"
+      "font-sf-armenian"
+      "font-sf-compact"
+      "font-sf-georgian"
+      "font-sf-hebrew"
+      "font-sf-pro"
+      "font-sf-mono"
+      "font-sf-mono-for-powerline"
+      "font-new-york"
     ];
 
     # Arguments passed to brew install --cask for all casks listed in homebrew.casks.
@@ -81,13 +97,18 @@
     };
 
     # List of Homebrew formula repositories to tap
-    taps = [
-      # {
-      #   name = "user/tap-repo";
-      #   clone_target = "https://user@bitbucket.org/user/homebrew-tap-repo.git";
-      #   force_auto_update = true;
-      # }
-    ];
+    #taps = [
+    # {
+    #   name = "user/tap-repo";
+    #   clone_target = "https://user@bitbucket.org/user/homebrew-tap-repo.git";
+    #   force_auto_update = true;
+    # }
+    #];
+
+    # https://github.com/zhaofengli/nix-homebrew/issues/5
+    # https://github.com/zhaofengli/nix-homebrew/pull/42
+    # "Figured it out - this is because nix-darwin's homebrew module is trying to untap all taps due to its taps attribute being empty by default."
+    taps = if config.nix-homebrew.enable then (builtins.attrNames config.nix-homebrew.taps) else [ ];
 
     # List of Docker images to install using whalebrew
     whalebrews = [

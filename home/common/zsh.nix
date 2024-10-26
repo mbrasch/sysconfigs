@@ -14,7 +14,7 @@
       path = "${config.xdg.configHome}/zsh/zsh_history";
       expireDuplicatesFirst = true;
       extended = true;
-      ignoreDups = false;
+      ignoreDups = true;
       ignorePatterns = [ ];
       ignoreSpace = true;
       save = 10000;

@@ -28,28 +28,53 @@
       system-features = [
         "big-parallel"
         "kvm"
+        "nixos-test"
+        "apple-virt"
       ];
 
       experimental-features = "nix-command flakes";
-      #allowed-users = "*";
     };
 
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
       extra-platforms = x86_64-darwin aarch64-darwin
-      extra-trusted-users = ${username}
+      extra-trusted-users = [ "${username}" "@admin" ]
       #access-token = ""
     '';
+
+    # https://nixcademy.com/posts/macos-linux-builder/
+    # test builder: nixos-rebuild switch --fast --target-host build02 --flake .#[nixosConf] --use-remote-sudo --use-substitutes
 
     linux-builder = {
       enable = true;
       #config = {}; # nixos config for the builder. normally you should not need this option
-      ephemeral = false; # set it true if you don't want the state of the builder (caveat: no benefit from the builders build cace.)
+      ephemeral = true; # set it true if you don't want the state of the builder (caveat: no benefit from the builders build cace.)
       systems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
+      mandatoryFeatures = [ ];
+      maxJobs = 4;
+      protocol = "ssh-ng";
+      speedFactor = 1;
+      supportedFeatures = [
+        "kvm"
+        "benchmark"
+        "big-parallel"
+      ];
+      workingDirectory = "/var/lib/darwin-builder";
+
+      config = {
+        nix.extraOptions = ''extra-platforms = x86_64-linux'';
+        virtualisation = {
+          darwin-builder = {
+            diskSize = 40 * 1024;
+            memorySize = 8 * 1024;
+          };
+          cores = 6;
+        };
+      };
     };
   };
 

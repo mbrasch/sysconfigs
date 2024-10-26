@@ -41,7 +41,7 @@ in
   ## misc
 
   # Whether to enable settings that make Home Manager work better on GNU/Linux distributions other than NixOS
-  targets.genericLinux.enable = true;
+  targets.genericLinux.enable = pkgs.stdenv.hostPlatform.isLinux;
 
   xdg = {
     enable = true;
@@ -129,11 +129,11 @@ in
         nix-output-monitor # parses output of nix-build to show additional information
         nix-tree # interactively browse a Nix store paths dependencies
         nix-inspect # interactive TUI for inspecting nix configs and other expressions
-        nixos-shell
         nixfmt-rfc-style # nix formatter
         nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
         nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
-        devenv
+        nixos-shell
+        nixos-rebuild
 
         #------------------------------------------
         # shell tools
@@ -261,9 +261,9 @@ in
 
       ]
       # @TODO: optionally only for NixOS
-      # ++ lib.optionals stdenv.isLinux [
-      #   nix-ld # Run unpatched dynamic binaries on NixOS
-      # ]
+      #++ lib.optionals stdenv.isLinux [
+      #  nix-ld # Run unpatched dynamic binaries on NixOS
+      #]
       ++ lib.optionals stdenv.isDarwin [
         asitop # Perf monitoring CLI tool for Apple Silicon
         vimPlugins.copilot-vim # for "Copilot for Xcode"

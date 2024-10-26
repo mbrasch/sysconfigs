@@ -33,6 +33,8 @@
     shell = pkgs.zsh;
   };
 
+  security.pam.enableSudoTouchIdAuth = true;
+
   # ------------------------------------------------------------------------------------------------
 
   # The set of packages that appear in /run/current-system/sw. These packages are automatically available to all users, and are automatically updated every time you rebuild the system configuration. (The latter is the main difference with installing them in the default profile, /nix/var/nix/profiles/default
@@ -84,6 +86,10 @@
   system.checks.verifyNixPath = false;
 
   system.activationScripts = {
+    # Configure nix to create Mac-supported aliases when adding GUI apps in the /Applications
+    # directory; this allows them to be indexed by Spotlight, Alfred, etc.
+    # DOES NOT SEEM TO WORK (at least not for Alfred)
+    # https://github.com/zhaofengli/nix-homebrew/issues/5#issuecomment-2412411087
     applications = {
       enable = true;
       text =

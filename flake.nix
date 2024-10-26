@@ -119,6 +119,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # A wrapper tool for nix OpenGL application
+    # documentation: https://github.com/nix-community/nixGL
+    #nixgl.url = "github:nix-community/nixGL";
+
     # Externally extensible flake systems
     # documentation: https://github.com/nix-systems/nix-systems
     nix-systems.url = "github:nix-systems/default";
@@ -159,7 +163,7 @@
 
     # no-nixpkgs standard library for the nix expression language
     # documentation: source code -> https://github.com/chessai/nix-std/
-    nix-std.url = "github:chessai/nix-std";
+    #nix-std.url = "github:chessai/nix-std";
 
     # Minimal Markdown Documentation
     # documentation: https://ryantm.github.io/mmdoc/
@@ -173,8 +177,8 @@
 
     # Automate reproducible packaging for various language ecosystems
     # documentation: https://nix-community.github.io/dream2nix/
-    dream2nix.url = "github:nix-community/dream2nix";
-    dream2nix.inputs.nixpkgs.follows = "nixpkgs";
+    #dream2nix.url = "github:nix-community/dream2nix";
+    #dream2nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # one config, multiple formats
     # documentation: https://github.com/nix-community/nixos-generators
@@ -193,12 +197,12 @@
 
     # Extra home manager modules
     # documentation: https://github.com/schuelermine/xhmm
-    xhmm.url = "github:schuelermine/xhmm";
+    #xhmm.url = "github:schuelermine/xhmm";
 
     # System-wide colorscheming and typography for NixOS and Home Manager
     # documentation: https://danth.github.io/stylix/
-    stylix.url = "github:danth/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
+    #stylix.url = "github:danth/stylix";
+    #stylix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Modules and schemes to make theming with Nix awesome.
     # documentation: https://github.com/misterio77/nix-colors
@@ -206,19 +210,19 @@
 
     # NixOS MicroVMs
     # documentation: https://astro.github.io/microvm.nix/
-    microvm.url = "github:astro/microvm.nix";
-    microvm.inputs.nixpkgs.follows = "nixpkgs";
+    #microvm.url = "github:astro/microvm.nix";
+    #microvm.inputs.nixpkgs.follows = "nixpkgs";
     #microvm.inputs.flake-utils.follows = "scripts/poetry2nix/flake-utils";
 
     # Multi-tenant Nix Binary Cache (runs on macOS too)
     # documentation: https://docs.attic.rs/
-    attic.url = "github:zhaofengli/attic";
-    attic.inputs.nixpkgs.follows = "nixpkgs";
-    attic.inputs.nixpkgs-stable.follows = "nixpkgs";
+    #attic.url = "github:zhaofengli/attic";
+    #attic.inputs.nixpkgs.follows = "nixpkgs";
+    #attic.inputs.nixpkgs-stable.follows = "nixpkgs";
 
     # Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process
-    nix-fast-build.url = "github:Mic92/nix-fast-build";
-    nix-fast-build.inputs.nixpkgs.follows = "nixpkgs";
+    #nix-fast-build.url = "github:Mic92/nix-fast-build";
+    #nix-fast-build.inputs.nixpkgs.follows = "nixpkgs";
 
     # Finds strings in a large list of cached NixOS store paths
     #grep-nixos-cache.url = "github:delroth/grep-nixos-cache";
@@ -226,7 +230,7 @@
 
     # Install flatpaks declaratively
     # documentation: https://github.com/gmodena/nix-flatpak
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    #nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     # nix2sbom extracts the SBOM (Software Bill of Materials) from a Nix derivation
     # documentation: https://github.com/louib/nix2sbom/wiki/
@@ -386,43 +390,50 @@
       ## usage:
       ##   nixos-rebuild switch --flake .#bistroserve
 
-      # nixosConfigurations = forAllNixosSystems (
-      #   system:
-      #   let
-      #     pkgs = nixpkgsFor.${system};
-      #   in
-      #   {
-      #     installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
-      #       inherit system;
-      #       modules = [ ./nixos/custom-iso.nix ];
-      #       format = "install-iso";
-      #     };
+      nixosConfigurations = forAllNixosSystems (system: {
+        installer-iso-qemu-aarch64 = inputs.nixos-generators.nixosGenerate {
+          inherit system;
+          modules = [ ./nixos/custom-iso.nix ];
+          format = "install-iso";
+        };
 
-      #     installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
-      #       inherit system;
-      #       modules = [ ./nixos/custom-iso.nix ];
-      #       format = "install-iso";
-      #     };
+        installer-iso-rrz-x86_64 = inputs.nixos-generators.nixosGenerate {
+          inherit system;
+          modules = [ ./nixos/custom-iso.nix ];
+          format = "install-iso";
+        };
 
-      #     bistroserve = nixpkgs.lib.nixosSystem {
-      #       specialArgs = {
-      #         inherit pkgs inputs;
-      #       };
-      #       modules = [
-      #         ./nixos/nix-nixpkgs-conf.nix
-      #         ./nixos/bistroserve
-      #         home-manager.nixosModules.home-manager
-      #         #nix-flatpak.nixosModules.nix-flatpak
-      #         {
-      #           home-manager.useGlobalPkgs = true;
-      #           home-manager.useUserPackages = true;
-      #           home-manager.users.mike = import ./home/mike;
-      #           #home-manager.extraSpecialArgs = { };
-      #         }
-      #       ];
-      #     };
-      #   }
-      # );
+        bistroserve =
+          let
+            hostname = "bistroserve";
+            username = "mike";
+          in
+          #system = "aarch64-darwin";
+          nixpkgs.lib.nixosSystem {
+            inherit system;
+            specialArgs = {
+              inherit
+                self
+                inputs
+                username
+                hostname
+                ;
+            };
+            modules = [
+              ./nixos/${hostname}
+              #nix-flatpak.nixosModules.nix-flatpak
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.${username} = import ./home/${username};
+                home-manager.extraSpecialArgs = {
+                  inherit inputs username;
+                };
+              }
+            ];
+          };
+      });
 
       ##############################################################################################
       ##
@@ -463,7 +474,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.mike = import ./home/${username};
+                home-manager.users.${username} = import ./home/${username};
                 home-manager.extraSpecialArgs = {
                   inherit inputs username;
                 };
