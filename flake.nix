@@ -551,7 +551,7 @@
           # configname wird in shell-tools.nix home.shellAliases genutzt
           #   wenn home-manager in nix-darwin bzw. nixos eingebettet ist
           mike-trillian = mkHomeConfig "aarch64-darwin" "mike" "mike-trillian";
-          mbrasch = mkHomeConfig "x86_64-linux" "mbrasch" "mbrasch";
+          brasch = mkHomeConfig "x86_64-linux" "brasch" "mbrasch";
           mike-linuxvm = mkHomeConfig "aarch64-linux" "mike" "mike-linuxvm";
         };
 
