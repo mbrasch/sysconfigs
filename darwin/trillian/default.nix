@@ -101,7 +101,6 @@
           };
         in
         pkgs.lib.mkForce ''
-          # Set up applications.
           echo "setting up /Applications..." >&2
           rm -rf /Applications/Nix\ Apps
           mkdir -p /Applications/Nix\ Apps
@@ -114,10 +113,13 @@
         '';
     };
     # print all changes after activating a new home manager generation
-    report-changes = {
+    postActivation = {
       enable = true;
-      text = ''
-        ${pkgs.nvd}/bin/nvd diff $oldGenPath $newGenPath
+      text = pkgs.lib.mkForce ''
+        if [ -e '/run/current-system' ]
+        then
+          ${pkgs.nvd}/bin/nvd diff "/run/current-system" "$(readlink -f "$systemConfig")"
+        fi
       '';
     };
   };

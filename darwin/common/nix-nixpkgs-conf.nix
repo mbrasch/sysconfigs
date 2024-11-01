@@ -48,7 +48,6 @@
 
     linux-builder = {
       enable = true;
-      #config = {}; # nixos config for the builder. normally you should not need this option
       ephemeral = true; # set it true if you don't want the state of the builder (caveat: no benefit from the builders build cace.)
       systems = [
         "x86_64-linux"
@@ -59,14 +58,17 @@
       protocol = "ssh-ng";
       speedFactor = 1;
       supportedFeatures = [
-        "kvm"
         "benchmark"
         "big-parallel"
       ];
       workingDirectory = "/var/lib/darwin-builder";
 
+      # nixos config for the builder. normally you should not need this option
+      # when installing nix-darwin for the first time, config must be deactivated, as the default
+      # linux-builder from the binary store must be installed first in order to build a custom
+      # linux-builder
       config = {
-        nix.extraOptions = ''extra-platforms = x86_64-linux'';
+        #nix.extraOptions = ''extra-platforms = x86_64-linux'';
         virtualisation = {
           darwin-builder = {
             diskSize = 40 * 1024;

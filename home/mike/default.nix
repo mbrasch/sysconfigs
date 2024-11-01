@@ -132,8 +132,12 @@ in
         nixfmt-rfc-style # nix formatter
         nixpacks # takes a source directory and produces an OCI compliant image that can be deployed anywhere
         nixd # language server for nix -> error: Package ‘nix-2.16.2’ in /nix/store/ihkdxl68qh2kcsr33z2jhvfdrpcf7xrg-source/pkgs/tools/package-management/nix/default.nix:229 is marked as insecure, refusing to evaluate.
+
         nixos-shell
         nixos-rebuild
+        nixos-option
+        nixos-anywhere
+        nixos-generators
 
         #------------------------------------------
         # shell tools

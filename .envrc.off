@@ -1,2 +1,2 @@
 use flake . --impure
-export DIRENV_WARN_TIMEOUT=30s
+export DIRENV_WARN_TIMEOUT=90s
