@@ -74,10 +74,6 @@ in
     # Tell it to map everything in the `config` directory in this repository to the `.config` in my home directory
     #file.".config" = { source = ./config; recursive = true; };
 
-    file = {
-      #"${config.xdg.configHome}/neofetch/config.conf".text = builtins.readFile ./neofetch.conf;
-    };
-
     activation = {
       # print all changes after activating a new home manager generation
       report-changes = config.lib.dag.entryAnywhere ''
@@ -313,7 +309,7 @@ in
   };
 
   ##################################################################################################
-  ## systemd
+  ## launchd
 
   launchd = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
 
